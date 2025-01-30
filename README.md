@@ -1,0 +1,1 @@
+travel guide where resturants, attractions and hotels are listed based on total number of people rated it. 
