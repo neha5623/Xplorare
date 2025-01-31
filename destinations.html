@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXPLORARE - Kerala Destinations</title>
+    <style>
+        /* Include all previous styles from main page */
+        
+        /* Additional styles for filter section */
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        .filter-button {
+            padding: 10px 20px;
+            background: #FF4B6E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-button:hover {
+            background: #ff3357;
+        }
+
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #FF4B6E;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .place-card {
+            position: relative;
+        }
+
+        .place-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include the same navbar as main page -->
+    <nav class="navbar">
+        <!-- Same navbar content -->
+    </nav>
+
+    <div style="margin-top: 100px; max-width: 1200px; margin-left: auto; margin-right: auto; padding: 0 40px;">
+        <a href="home2.html" class="back-link">← Back to Home</a>
+        
+        <h1 class="section-title">Explore Kerala's Destinations</h1>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <select class="filter-select" id="district-filter">
+                    <option value="">Select District</option>
+                    <option value="alappuzha">Alappuzha</option>
+                    <option value="ernakulam">Ernakulam</option>
+                    <option value="idukki">Idukki</option>
+                    <option value="kannur">Kannur</option>
+                    <!-- Add all districts -->
+                </select>
+
+                <select class="filter-select" id="terrain-filter">
+                    <option value="">Select Terrain</option>
+                    <option value="beach">Beaches</option>
+                    <option value="hill-station">Hill Stations</option>
+                    <option value="backwaters">Backwaters</option>
+                    <option value="forest">Forest/Wildlife</option>
+                </select>
+
+                <select class="filter-select" id="attraction-filter">
+                    <option value="">Main Attraction</option>
+                    <option value="nature">Nature</option>
+                    <option value="culture">Culture</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="pilgrimage">Pilgrimage</option>
+                </select>
+
+                <button class="filter-button" onclick="applyFilters()">Apply Filters</button>
+            </div>
+        </div>
+
+        <div class="destinations-grid" id="destinations-container">
+            <!-- Destination cards will be dynamically populated -->
+        </div>
+    </div>
+
+    <!-- Include the same footer as main page -->
+    <footer>
+        <!-- Same footer content -->
+    </footer>
+
+    <script>
+        // Sample destination data
+        const destinations = [
+            {
+                name: "Alleppey Backwaters",
+                description: "Famous for houseboat cruises and serene backwaters",
+                image: "/api/placeholder/400/200",
+                rating: "4.9",
+                district: "alappuzha",
+                terrain: "backwaters",
+                attraction: "nature",
+                tags: ["Houseboats", "Backwaters", "Beaches"]
+            },
+            {
+                name: "Munnar",
+                description: "Stunning hill station with tea plantations",
+                image: "/api/placeholder/400/200",
+                rating: "4.8",
+                district: "idukki",
+                terrain: "hill-station",
+                attraction: "nature",
+                tags: ["Tea Gardens", "Trekking", "Wildlife"]
+            },
+            // Add more destinations
+        ];
+
+        function createDestinationCard(destination) {
+            return `
+                <div class="place-card" data-district="${destination.district}" 
+                     data-terrain="${destination.terrain}" data-attraction="${destination.attraction}">
+                    <img src="${destination.image}" alt="${destination.name}" class="place-image">
+                    <div class="place-info">
+                        <h3>${destination.name}</h3>
+                        <p>${destination.description}</p>
+                        <div class="place-rating">★★★★★ ${destination.rating}</div>
+                        <div class="place-tags">
+                            ${destination.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function applyFilters() {
+            const districtFilter = document.getElementById('district-filter').value;
+            const terrainFilter = document.getElementById('terrain-filter').value;
+            const attractionFilter = document.getElementById('attraction-filter').value;
+
+            const filteredDestinations = destinations.filter(dest => {
+                return (!districtFilter || dest.district === districtFilter) &&
+                       (!terrainFilter || dest.terrain === terrainFilter) &&
+                       (!attractionFilter || dest.attraction === attractionFilter);
+            });
+
+            const container = document.getElementById('destinations-container');
+            container.innerHTML = filteredDestinations.map(createDestinationCard).join('');
+        }
+
+        // Initial load of all destinations
+        window.onload = () => {
+            const container = document.getElementById('destinations-container');
+            container.innerHTML = destinations.map(createDestinationCard).join('');
+        };
+    </script>
+</body>
+</html>
