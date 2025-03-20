@@ -5,7 +5,7 @@
     <!-- All previous styles remain exactly the same -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XPLORARE - Your Kerala Guide</title>
+    <title>XPLORARE - EXPLOREPAGE</title>
     <style>
         /* All previous styles remain exactly the same */
         * {
@@ -28,14 +28,16 @@
             top: 0;
             z-index: 1000;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-start;
         }
 
         .nav-content {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 0 50px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content:flex-start;
+            align-items:center;
         }
 
         .logo {
@@ -43,48 +45,15 @@
             font-weight: bold;
             color: #FF4B6E;
         }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-links a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #FF4B6E;
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .auth-buttons button {
-            padding: 10px 20px;
+        #back{
+            padding: 12px 24px;
+            background: #FF4B6E;
+            color: white;
+            border: none;
             border-radius: 8px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
         }
-
-        .profile-btn {
-            background: none;
-            border: 2px solid #FF4B6E;
-            color: #FF4B6E;
-        }
-
-        .settings-btn {
-            background: #FF4B6E;
-            border: none;
-            color: white;
-        }
-
         /* Hero Section */
         .hero {
             background-color: #FFE4E4;
@@ -160,12 +129,13 @@
         }
 
         .feature-card {
-            background: white;
+            background:  #FFE4E4;
             padding: 30px;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
             text-align: center;
             transition: transform 0.3s;
+            cursor: pointer;
         }
 
         .feature-card:hover {
@@ -394,120 +364,42 @@
 </head>
 <body>
     <nav class="navbar">
+        <div id="back">Back</div>
         <div class="nav-content">
             <div class="logo">XPLORARE.</div>
-            <div class="nav-links">
-                <a href="#">Home</a>
-                <a href="#">Destinations</a>
-                <a href="#">Activities</a>
-                <a href="#">About</a>
-                <a href="#">Contact</a>
-            </div>
-            <div class="auth-buttons">
-                <a href="profile.html" class="profile-btn">Profile</a>
-                <a href="settings.html" class="settings-btn">Settings</a>
-            </div>
         </div>
     </nav>
 
     <section class="hero">
         
         <div class="hero-content">
-            <h1>Discover the Wonders of Kerala</h1>
+            <h1>Kozhikode</h1>
             <p>Explore breathtaking landscapes, hidden gems, and cultural treasures across God’s Own Country.</p>
-            <div class="search-bar">
-                <input id="locationInput" type="text" placeholder="Search for a city or attraction in Kerala..." onkeyup="searchLocation()">
-                <button id="searchBtn">Explore Now</button>
-            </div>
-            <ul id="suggestions" class="suggestions-list"></ul>
-            
-            <style>
-                .suggestions-list {
-                    position: absolute;
-                    width: 600px;
-                    background: white;
-                    border: 1px solid #ddd;
-                    list-style: none;
-                    margin-left: 100px;
-                    text-align: left;
-                    margin-top: 5px;
-                    border-radius: 8px;
-                    max-height: 200px;
-                    overflow-y: auto;
-                    display: none;
-                }
-            
-                .suggestions-list li {
-                    padding: 10px;
-                    cursor: pointer;
-                    border: 1px 0px 0px 0px rgb(190, 187, 187) solid;
-                }
-            
-                .suggestions-list li:hover {
-                    background: #f0f0f0;
-                }
-            </style>
-            
+           
         </div>
         
     </section>
 
     <section class="features">
-        <h2 class="section-title">Why Choose XPLORARE</h2>
+        <h2 class="section-title">Plan your visit!</h2>
         <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon">🗺️</div>
-                <h3>Local Expertise</h3>
-                <p>Get insider tips and recommendations from local guides and experts.</p>
+            <div class="feature-card" id="hotel">
+                <div class="feature-icon">🏨</div>
+                <h3>Hotels</h3>
+                <p>Find the best accommodations, from luxury resorts to cozy homestays, ensuring a comfortable stay.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">⭐</div>
-                <h3>Curated Experiences</h3>
-                <p>Hand-picked attractions and activities for unforgettable memories.</p>
+            <div class="feature-card"id="Restaurants">
+                <div class="feature-icon" >🍴</div>
+                <h3>Restaurants</h3>
+                <p>Discover top-rated eateries and local delicacies, from authentic Kerala cuisine to international flavors.</p>
             </div>
-            <div class="feature-card">
-                <div class="feature-icon">📱</div>
-                <h3>Easy Planning</h3>
-                <p>Plan your perfect itinerary with our intuitive tools and guides.</p>
-            </div>
-        </div>
-    </section>
-    
-    <section class="popular-places">
-        <div class="section-header">
-            <h2 class="section-title">Popular Destinations</h2>
-            <a href="destinations.html" class="view-all">View All →</a>
-        </div>
-        <!-- Rest of the popular-places section remains the same -->
-
-        <div class="places-grid">
-            <div class="place-card">
-                <img src="/api/placeholder/400/200" alt="Alleppey Backwaters" class="place-image">
-                <div class="place-info">
-                    <h3>Alleppey Backwaters</h3>
-                    <p>Venice of the East with serene houseboats</p>
-                    <div class="place-rating">★★★★★ 4.9</div>
-                </div>
-            </div>
-            <div class="place-card">
-                <img src="/api/placeholder/400/200" alt="Munnar" class="place-image">
-                <div class="place-info">
-                    <h3>Munnar</h3>
-                    <p>Rolling hills and endless tea plantations</p>
-                    <div class="place-rating">★★★★★ 4.8</div>
-                </div>
-            </div>
-            <div class="place-card">
-                <img src="/api/placeholder/400/200" alt="Fort Kochi" class="place-image">
-                <div class="place-info">
-                    <h3>Fort Kochi</h3>
-                    <p>Historic coastal charm with Chinese nets</p>
-                    <div class="place-rating">★★★★★ 4.7</div>
-                </div>
+            <div class="feature-card" id="spots">
+                <div class="feature-icon" >🗺️</div>
+                <h3>Attractions</h3>
+                <p>Explore must-visit destinations, scenic spots, and hidden gems that showcase the beauty of Kerala.</p>
             </div>
         </div>
     </section>
-
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -588,10 +480,19 @@
         
             console.log("Selected Place:", place.display_name, "Latitude:", place.lat, "Longitude:", place.lon);
         }
-        document.getElementById('searchBtn').addEventListener('click', function() {
-        window.location.href = 'explore.html'; 
+        document.getElementById('back').addEventListener('click', function() {
+        window.location.href = 'home2.html'; 
     });
-    </script>
+    document.getElementById('spots').addEventListener('click', function() {
+        window.location.href = 'spots.html'; 
+    });
+    document.getElementById('hotel').addEventListener('click', function() {
+        window.location.href = 'hotel.html'; 
+    });
+    document.getElementById('Restaurants').addEventListener('click', function() {
+        window.location.href = 'restaurant.html'; 
+    });
+        </script>
         
 </body>
 </html>

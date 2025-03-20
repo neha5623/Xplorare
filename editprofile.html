@@ -140,7 +140,7 @@
     <div class="profile-container">
         <div class="header">
             <div class="logo">Xplorare.</div>
-            <button class="edit-profile-btn">Edit Profile</button>
+            <button id="back" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Back</button>
         </div>
 
         <div class="profile-header">
@@ -183,16 +183,12 @@
                 
             </div>
         </div>
-        <div style="display: flex;justify-content: space-between;margin: 0 50px 0 50px;">
-        <button id="back" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Back</button>
-        <button id="logout-button" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Logout</button>
+        <div style="display: flex;justify-content: space-between;margin: 0 50px 0 0;">
+            <button id="back" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Save Changes</button>
         </div>
     </div>
     <script>
-        document.querySelector('.edit-profile-btn').addEventListener('click', function() {
-            // Add your edit profile logic here
-            window.location.href = 'editprofile.html'; 
-        });
+        
         
         document.addEventListener("DOMContentLoaded", async () => {
             // Check for token from login page
@@ -238,14 +234,9 @@
             }
         });
 
-        // Logout function - Updated to match login2.html functionality
-        document.getElementById("logout-button").addEventListener("click", function() {
-            localStorage.removeItem("token");
-            alert("Logged out successfully!");
-            window.location.href = "login2.html";
-        });
+        
         document.getElementById('back').addEventListener('click', function() {
-        window.location.href = 'home2.html'; 
+        window.location.href = 'profile.html'; 
         });
     </script>
 </body>
