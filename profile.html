@@ -144,54 +144,104 @@
         </div>
 
         <div class="profile-header">
-            <div class="profile-picture">
+            <div class="profile-picture" id="profile-initials">
                 DF
             </div>
             <div class="profile-info">
-                <h1>Daniel Fletcher</h1>
-                <p>daniel2flether@gmail.com</p>
+                <h1 id="profile-name">Loading...</h1>
+                <p id="profile-email">Loading...</p>
             </div>
         </div>
-
+        
         <div class="profile-sections">
             <div class="section">
                 <h2>Personal Information</h2>
                 <div class="info-item">
                     <label>Full Name</label>
-                    <p>Daniel Fletcher</p>
+                    <p id="full-name">Loading...</p>
                 </div>
                 <div class="info-item">
-                    <label>Location</label>
-                    <p>San Francisco, CA</p>
+                    <label>Gender</label>
+                    <p id="gender">Loading...</p>
+                </div>
+                <div class="info-item">
+                    <label>Date of Birth</label>
+                    <p id="dob">Loading...</p>
                 </div>
                 <div class="info-item">
                     <label>Joined</label>
-                    <p>January 2024</p>
+                    <p id="joined">Loading...</p>
                 </div>
             </div>
-
+        
             <div class="section">
                 <h2>Account Settings</h2>
                 <div class="info-item">
                     <label>Email</label>
-                    <p>daniel2flether@gmail.com</p>
+                    <p id="email">Loading...</p>
                 </div>
-                <div class="info-item">
-                    <label>Password</label>
-                    <p>••••••••</p>
-                </div>
-                <div class="info-item">
-                    <label>Language</label>
-                    <p>English (US)</p>
-                </div>
+                
             </div>
         </div>
+        
+        <button id="logout-button" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Logout</button>
     </div>
 
     <script>
         document.querySelector('.edit-profile-btn').addEventListener('click', function() {
             // Add your edit profile logic here
             console.log('Edit profile clicked');
+        });
+        
+        document.addEventListener("DOMContentLoaded", async () => {
+            // Check for token from login page
+            const token = localStorage.getItem("token");
+
+            if (!token) {
+                alert("You must log in first!");
+                window.location.href = "login2.html";
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/profile", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Update Profile Info
+                    document.getElementById("profile-name").innerText = `${data.first_name} ${data.last_name}`;
+                    document.getElementById("profile-email").innerText = data.email;
+                    document.getElementById("full-name").innerText = `${data.first_name} ${data.last_name}`;
+                    document.getElementById("gender").innerText = data.gender || "Not specified";
+                    document.getElementById("dob").innerText = data.dob || "Not specified";
+                    document.getElementById("joined").innerText = new Date(data.created_at).toDateString();
+                    document.getElementById("email").innerText = data.email;
+
+                    // Update Profile Initials
+                    const initials = data.first_name.charAt(0).toUpperCase() + data.last_name.charAt(0).toUpperCase();
+                    document.getElementById("profile-initials").innerText = initials;
+                } else {
+                    alert(data.error || "Failed to load profile.");
+                    window.location.href = "login2.html";
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                alert("Something went wrong!");
+            }
+        });
+
+        // Logout function - Updated to match login2.html functionality
+        document.getElementById("logout-button").addEventListener("click", function() {
+            localStorage.removeItem("token");
+            alert("Logged out successfully!");
+            window.location.href = "login2.html";
         });
     </script>
 </body>

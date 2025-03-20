@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xplorare - Sign Up</title>
+    <link rel="icon" href="data:,">
     <style>
         * {
             margin: 0;
@@ -66,13 +67,6 @@
             color: #FF4B6E;
         }
 
-        .close-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 24px;
-        }
-
         .signup-title {
             font-size: 32px;
             font-weight: bold;
@@ -107,15 +101,34 @@
             border-color: #FF4B6E;
         }
 
-        .terms {
-            margin: 20px 0;
-            color: #666;
-            font-size: 14px;
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
-        .terms a {
-            color: #FF4B6E;
-            text-decoration: none;
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+            accent-color: #FF4B6E;
+        }
+
+        .dob-group {
+            margin-bottom: 20px;
+        }
+
+        .dob-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
         .signup-btn {
@@ -134,37 +147,6 @@
             background-color: #ff3459;
         }
 
-        .divider {
-            margin: 20px 0;
-            text-align: center;
-            position: relative;
-        }
-
-    
-
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .social-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: border-color 0.3s;
-        }
-
-        .social-btn:hover {
-            border-color: #FF4B6E;
-        }
-
         .login-link {
             text-align: center;
             color: #666;
@@ -175,43 +157,6 @@
             text-decoration: none;
             font-weight: 500;
         }
-
-        /* Radio button styles */
-.radio-group {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.radio-option {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.radio-option input[type="radio"] {
-    width: auto;
-    margin: 0;
-    accent-color: #FF4B6E;
-}
-
-/* Date of birth styles */
-.dob-group {
-    margin-bottom: 20px;
-}
-
-.dob-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-}
-
-.dob-input:focus {
-    outline: none;
-    border-color: #FF4B6E;
-}
 
         @media (max-width: 768px) {
             .signup-container {
@@ -232,12 +177,11 @@
 <body>
     <div class="signup-container">
         <div class="illustration-side">
-            <img src="girl.jfif" alt="Cute character illustration" class="illustration">
+            <img src="girl.jfif" alt="Illustration" class="illustration" onerror="this.style.display='none'">
         </div>
         <div class="form-side">
             <div class="header">
                 <div class="logo">Xplorare.</div>
-                <button class="close-btn">×</button>
             </div>
             <h1 class="signup-title">Create Account</h1>
             <form id="signup-form">
@@ -281,29 +225,46 @@
                     <label for="dob">Date of Birth</label>
                     <input type="date" id="dob" class="dob-input" required>
                 </div>
-                <div class="terms">
-                    By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                </div>
                 <button type="submit" class="signup-btn">Create Account</button>
             </form>
             
-           
             <div class="login-link">
-                Already have an account? <a href="login.html">Log in</a>
+                Already have an account? <a href="login2.html">Log in</a>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('signup-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const firstName = document.getElementById('firstname').value;
-            const lastName = document.getElementById('lastname').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            // Add your signup logic here
-            console.log('Signup attempted with:', { firstName, lastName, email });
+document.getElementById('signup-form').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = {
+        firstName: document.getElementById('firstname').value.trim(),
+        lastName: document.getElementById('lastname').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        gender: document.querySelector('input[name="gender"]:checked')?.value,
+        dob: document.getElementById('dob').value
+    };
+
+    try {
+        const response = await fetch("http://localhost:5000/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
         });
+
+        const result = await response.json();
+        if (result.error) {
+            alert("Signup failed: " + result.error);
+        } else {
+            alert("Signup successful!");
+            window.location.href = "login2.html";
+        }
+    } catch (error) {
+        alert("Something went wrong!");
+    }
+});
     </script>
 </body>
 </html>
