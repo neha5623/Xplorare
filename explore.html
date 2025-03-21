@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XPLORARE - EXPLOREPAGE</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <style>
         /* All previous styles remain exactly the same */
         * {
@@ -70,6 +71,7 @@
             font-size: 48px;
             color: #333;
             margin-bottom: 20px;
+          
         }
 
         .hero p {
@@ -373,7 +375,9 @@
     <section class="hero">
         
         <div class="hero-content">
-            <h1>Kozhikode</h1>
+            <div  id="location-name">
+                
+            </div>
             <p>Explore breathtaking landscapes, hidden gems, and cultural treasures across God’s Own Country.</p>
            
         </div>
@@ -445,6 +449,12 @@
     </footer>
 
     <script>
+        var url_string = window.location.href
+        var addressUrl = new URL(url_string);
+        var place = addressUrl.searchParams.get("place");
+        console.log(place);
+        var placeDetail=`<h1>${place}</h1>`
+        $('#location-name').append(placeDetail);
         async function searchLocation() {
             const query = document.getElementById('locationInput').value;
             if (query.length < 3) return; // Start searching after 3 characters
@@ -481,17 +491,21 @@
             console.log("Selected Place:", place.display_name, "Latitude:", place.lat, "Longitude:", place.lon);
         }
         document.getElementById('back').addEventListener('click', function() {
+           
         window.location.href = 'home2.html'; 
-    });
-    document.getElementById('spots').addEventListener('click', function() {
-        window.location.href = 'spots.html'; 
-    });
-    document.getElementById('hotel').addEventListener('click', function() {
-        window.location.href = 'hotel.html'; 
-    });
-    document.getElementById('Restaurants').addEventListener('click', function() {
-        window.location.href = 'restaurant.html'; 
-    });
+        });
+        document.getElementById('spots').addEventListener('click', function() {
+            var url = `spots.html?place=${encodeURIComponent(place)}`;
+            window.location.href = url; 
+        });
+        document.getElementById('hotel').addEventListener('click', function() {
+            var url = `hotel.html?place=${encodeURIComponent(place)}`;
+            window.location.href = url;
+        });
+        document.getElementById('Restaurants').addEventListener('click', function() {
+            var url = `restaurants.html?place=${encodeURIComponent(place)}`;
+            window.location.href = url;
+        });
         </script>
         
 </body>
