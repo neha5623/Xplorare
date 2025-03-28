@@ -455,41 +455,7 @@
         console.log(place);
         var placeDetail=`<h1>${place}</h1>`
         $('#location-name').append(placeDetail);
-        async function searchLocation() {
-            const query = document.getElementById('locationInput').value;
-            if (query.length < 3) return; // Start searching after 3 characters
         
-            const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}, Kerala, India&addressdetails=1&limit=5`);
-            const data = await response.json();
-            
-            displaySuggestions(data);
-        }
-        
-        function displaySuggestions(places) {
-            const suggestionsList = document.getElementById('suggestions');
-            suggestionsList.innerHTML = ''; // Clear previous results
-        
-            if (places.length === 0) {
-                suggestionsList.style.display = 'none';
-                return;
-            }
-        
-            places.forEach(place => {
-                const li = document.createElement('li');
-                li.textContent = place.display_name;
-                li.onclick = () => selectLocation(place);
-                suggestionsList.appendChild(li);
-            });
-        
-            suggestionsList.style.display = 'block';
-        }
-        
-        function selectLocation(place) {
-            document.getElementById('locationInput').value = place.display_name;
-            document.getElementById('suggestions').style.display = 'none';
-        
-            console.log("Selected Place:", place.display_name, "Latitude:", place.lat, "Longitude:", place.lon);
-        }
         document.getElementById('back').addEventListener('click', function() {
            
         window.location.href = 'home2.html'; 
