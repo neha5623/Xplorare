@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Previous head and style sections remain exactly the same -->
+<head>
+    <!-- All previous styles remain exactly the same -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPLORARE - EXPLOREPAGE</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        /* All previous styles remain exactly the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+        .filtrbtn{
+            padding: 12px 15px;
+            background: #FF4B6E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+          
+            font-weight: 500;
+            cursor: pointer;
+        }
+       
+        /* Navigation */
+        .navbar {
+            background-color: white;
+            padding: 20px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 50px;
+            display: flex;
+            justify-content:flex-start;
+            align-items:center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF4B6E;
+        }
+        #back{
+            padding: 12px 24px;
+            background: #FF4B6E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        /* Hero Section */
+        .hero {
+            background-color: #FFE4E4;
+            padding: 120px 40px 60px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            color: #333;
+            margin-bottom: 20px;
+          
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            padding: 12px 24px;
+            background: #FF4B6E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin:0 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-rows: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background:  #FFE4E4;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: left;
+            transition: transform 0.3s;
+            cursor: pointer;
+            
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 36px;
+            color: #FF4B6E;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            margin-bottom: 40px;
+        }
+
+        .view-all {
+            color: #FF4B6E;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .view-all:hover {
+            text-decoration: underline;
+        }
+
+        
+        /* Popular Places */
+        .popular-places {
+            padding: 60px 40px;
+            background: #f8f8f8;
+        }
+
+        .places-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .place-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .place-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .place-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .place-info {
+            padding: 20px;
+        }
+
+        .place-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .place-info p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .place-rating {
+            color: #FFB168;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 60px 40px 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #FF4B6E;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .nav-links, .auth-buttons {
+                display: none;
+            }
+
+            .hero {
+                padding: 100px 20px 40px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .features, .popular-places {
+                padding: 40px 20px;
+            }
+        }
+
+        .auth-buttons a {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .login-btn {
+            background: none;
+            border: 2px solid #FF4B6E;
+            color: #FF4B6E;
+        }
+
+        .signup-btn {
+            background: #FF4B6E;
+            border: none;
+            color: white;
+        }
+
+        /* Add styles for logged-in state */
+        .user-menu {
+            display: none;
+            position: relative;
+        }
+
+        .user-menu.active {
+            display: block;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            min-width: 200px;
+            display: none;
+        }
+
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .user-dropdown a:hover {
+            background: #f5f5f5;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div id="back">Back</div>
+        <div class="nav-content">
+            <div class="logo">XPLORARE.</div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        
+        <div class="hero-content">
+        </div>
+        
+    </section>
+    <div style="display: grid;grid-template-columns: 6fr 1fr ;">
+        <section class="features" >
+            <div style="display: flex; ">
+            <h2 class="section-title"style="flex:25;padding-left:40px;" id="xplorestay" >Explore stays!</h2>
+            <div style="flex:1;cursor: pointer;" id="filter"><svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#FF4B6E"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></div>
+            </div>
+            <div class="features-grid">
+            </div>
+        </section>
+        <section id="filterpanel" style="border: #444 2px solid;background-color: #333;display:flex;justify-content: center;" >
+            <div style="width: 200px;height: 350px; margin-top: 60px;color: white;">
+                
+                <h2 style="color: white;font-size:32px ;">Filter</h2>
+                <br>
+                <br>
+                <div style="display: flex;flex-direction: column;gap: 20px;justify-content: center;">
+                <label>Women-Only Stays
+                    <input type="checkbox" id="womenOnly"> 
+                </label>
+                <label>
+                    Price Range:
+                    <select id="priceFilter">
+                        <option value="low">Budget</option>
+                        <option value="mid">Mid-Range</option>
+                        <option value="high">Luxury</option>
+                    </select>
+                </label>
+                <div class="filter-buttons" style="display: flex;justify-content: space-around;">
+                    <button id="applyFilters"  class="filtrbtn">Apply</button>
+                    <button id="clearFilters" class="filtrbtn">Clear</button>
+                  
+                </div>
+                </div>
+            </div>
+        </section>
+    
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>About EXPLORARE</h4>
+                <ul>
+                    <li><a href="#">Our Story</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Discover</h4>
+                <ul>
+                    <li><a href="#">Cities</a></li>
+                    <li><a href="#">Experiences</a></li>
+                    <li><a href="#">Local Guides</a></li>
+                    <li><a href="#">Travel Tips</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">Pinterest</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EXPLORARE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        var url_string = window.location.href;
+        var addressUrl = new URL(url_string);
+        var place = addressUrl.searchParams.get("place");
+    
+        console.log(place);
+        
+        var placeDetail = `<h1>Hotels in ${place}</h1><p>Find the best accommodations, from luxury resorts to cozy homestays in ${place}.</p>`;
+        $('.hero-content').append(placeDetail);
+    
+        document.getElementById('back').addEventListener('click', function() {
+            var url = `explore.html?place=${encodeURIComponent(place)}`;
+            window.location.href = url;
+        });
+    
+        // Function to fetch hotel data using OpenTripMap API
+        function fetchHotels(place) {
+            var apiKey = "5ae2e3f221c38a28845f05b6532a2c2846936d10d5d3850cea8664a3";  // Replace with your OpenTripMap API key
+            var geoUrl = `https://api.opentripmap.com/0.1/en/places/geoname?name=${place}&apikey=${apiKey}`;
+    
+            $.getJSON(geoUrl, function(data) {
+                if (data.lat && data.lon) {
+                    var hotelsUrl = `https://api.opentripmap.com/0.1/en/places/radius?radius=5000&lon=${data.lon}&lat=${data.lat}&kinds=accomodations&apikey=${apiKey}`;
+               
+                    $.getJSON(hotelsUrl, function(hotelData) {
+
+                        displayHotels(hotelData.features);
+                    });
+                } else {
+                    console.log("Could not fetch location data.");
+                }
+            });
+        }
+
+        // Function to display hotels
+        function displayHotels(hotels) {
+            var featuresGrid = $(".features-grid");
+            featuresGrid.empty(); // Clear existing feature cards
+    
+            if (hotels.length === 0) {
+                featuresGrid.append(`<p>No hotels found in ${place}.</p>`);
+                return;
+            }
+    
+            hotels.forEach(function(hotel) {
+                
+                var hotelName = hotel.properties.name || "Unnamed Hotel";
+                console.log(hotel.properties);
+                var hotelCard = $(`
+            <div class="feature-card" style="opacity: 0; transform: translateY(20px);display:grid;grid-template-columns:1fr 3fr;gap:25px;">
+               
+                <div><img src="girl.jfif" id="hotel-image" alt="hotel preview" style="height:200px"></div>
+                <div >
+                <h3>${hotelName}</h3>
+                <p>Rating:</strong> ${hotel.properties.rate}</p>
+                <br>
+                <p>Price:</strong> ${hotel.properties.price ? hotel.properties.price : 'Not available'}</p>
+                </div>
+               
+            </div>
+        `);
+
+        featuresGrid.append(hotelCard);
+        
+        hotelCard.animate({ opacity: 1, transform: "translateY(0)" }, 500);
+            });
+        }
+    
+        $(document).ready(function () {
+            fetchHotels(place);
+    
+        });
+    </script>
+    
+        
+</body>
+</html>

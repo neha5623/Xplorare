@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplorare - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #FFE4E4;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background-color: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 1000px;
+            min-height: 600px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .illustration-side {
+            flex: 1;
+            background-color: #FFE4E4;
+            padding: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .illustration {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .form-side {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF4B6E;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #f5f5f5;
+        }
+
+        .login-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #FF4B6E;
+            box-shadow: 0 0 0 4px rgba(255, 75, 110, 0.1);
+        }
+
+        .form-group .error-message {
+            color: #ff3459;
+            font-size: 14px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #ff3459;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-password a {
+            color: #FFB168;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .forgot-password a:hover {
+            color: #ff9635;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #FF4B6E;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .login-btn:hover {
+            background-color: #ff3459;
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .signup-link {
+            text-align: center;
+            color: #666;
+            margin-top: 24px;
+        }
+
+        .signup-link a {
+            color: #FF4B6E;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #ff3459;
+        }
+
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .illustration-side {
+                display: none;
+            }
+
+            .form-side {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Loading state */
+        .login-btn.loading {
+            position: relative;
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .login-btn.loading::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Alert box styling */
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="illustration-side">
+            <img src="girl.jfif" alt="Cute character illustration" class="illustration">
+        </div>
+        <div class="form-side">
+            <div class="header">
+                <div class="logo">Xplorare.</div>
+                
+            </div>
+            <h1 class="login-title">Login</h1>
+            
+            <!-- Alert box for messages -->
+            <div id="alert-box" class="alert"></div>
+            
+            <form id="login-form" novalidate>
+                <div class="form-group" id="email-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        required
+                    >
+                    <div class="error-message" id="email-error">Please enter a valid email address</div>
+                </div>
+                <div class="form-group" id="password-group">
+                    <label for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        minlength="8"
+                        required
+                    >
+                    <div class="error-message" id="password-error">Password must be at least 8 characters long</div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="forgotpswd.html">Forgot Password?</a>
+                </div>
+                <button type="submit" class="login-btn" id="login-button">Log In</button>
+            </form>
+           
+            <div class="signup-link">
+                Don't have an account? <a href="signup.html">Sign Up here</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already logged in
+        /*document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("token")) {
+                window.location.href = "home2.html";
+            }
+            
+            // Check for redirect message
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                showAlert(message, message.includes("success") ? "success" : "error");
+            }
+        });*/
+
+        // Helper function to show alerts
+        function showAlert(message, type = "error") {
+            const alertBox = document.getElementById("alert-box");
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = "block";
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 5000);
+        }
+
+        // Validate form fields
+        function validateField(field, regex, errorMsg) {
+            const value = field.value.trim();
+            const formGroup = field.parentElement;
+            const errorElement = formGroup.querySelector(".error-message");
+            
+            if (!regex.test(value)) {
+                formGroup.classList.add("error");
+                errorElement.textContent = errorMsg;
+                return false;
+            } else {
+                formGroup.classList.remove("error");
+                return true;
+            }
+        }
+
+        // Form submission handler
+        document.getElementById("login-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById("email");
+            const password = document.getElementById("password");
+            const loginButton = document.getElementById("login-button");
+            
+            // Email and password validation
+            const emailValid = validateField(
+                email, 
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+                "Please enter a valid email address"
+            );
+            
+            const passwordValid = validateField(
+                password, 
+                /^.{8,}$/, 
+                "Password must be at least 8 characters long"
+            );
+            
+            if (!emailValid || !passwordValid) {
+                return;
+            }
+            
+            // Show loading state
+            loginButton.classList.add("loading");
+            loginButton.disabled = true;
+            
+            try {
+                const response = await fetch("http://localhost:5000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ 
+                        email: email.value.trim(), 
+                        password: password.value.trim() 
+                    }),
+                });
+
+                const data = await response.json();
+
+                // Remove loading state
+                loginButton.classList.remove("loading");
+                loginButton.disabled = false;
+
+                if (response.ok) {
+                    // Save token to local storage
+                    localStorage.setItem("token", data.token);
+                    
+                    // Show success message
+                    showAlert("Login successful! Redirecting...", "success");
+                    
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = "home2.html";
+                    }, 1000);
+                } else {
+                    // Show error message
+                    showAlert(data.message || "Login failed. Please check your credentials.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                loginButton.classList.remove("loading");
+                loginButton.disabled = false;
+                showAlert("Connection error. Please try again later.");
+            }
+        });
+
+        // Input validation on blur
+        document.getElementById("email").addEventListener("blur", function() {
+            validateField(
+                this, 
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+                "Please enter a valid email address"
+            );
+        });
+        
+        document.getElementById("password").addEventListener("blur", function() {
+            validateField(
+                this, 
+                /^.{8,}$/, 
+                "Password must be at least 8 characters long"
+            );
+        });
+       
+    </script>
+</body>
+</html>

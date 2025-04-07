@@ -134,7 +134,7 @@
     </footer>
 
     <script>
-      
+
     const apiKey = "5ae2e3f221c38a28845f05b6532a2c2846936d10d5d3850cea8664a3"; // Replace with your real API key
     const apiUrl = `https://api.opentripmap.com/0.1/en/places/radius?radius=50000&lon=76.2711&lat=10.8505&format=json&apikey=${apiKey}`;
 
@@ -143,8 +143,8 @@
     function createDestinationCard(destination) {
         const tags = destination.kinds ? destination.kinds.split(',').slice(0, 3) : ["Scenic"];
         return `
-            <div class="place-card" data-district="${destination.district || ''}" 
-                 data-terrain="${destination.terrain || ''}" data-attraction="${destination.attraction || ''}">
+            <div class="place-card" data-district="${destination.district}" 
+                 data-terrain="${destination.terrain}" data-attraction="${destination.attraction}">
                 <img src="/api/placeholder/400/200" alt="${destination.name}" class="place-image">
                 <div class="place-info">
                     <h3>${destination.name}</h3>
@@ -159,16 +159,15 @@
     }
 
     function applyFilters() {
-        const districtFilter = document.getElementById('district-filter').value;
-        const terrainFilter = document.getElementById('terrain-filter').value;
-        const attractionFilter = document.getElementById('attraction-filter').value;
+        const districtFilter = document.getElementById('district-filter').value.toLowerCase();
+        const terrainFilter = document.getElementById('terrain-filter').value.toLowerCase();
+        const attractionFilter = document.getElementById('attraction-filter').value.toLowerCase();
 
         const filteredDestinations = destinations.filter(dest => {
-    return (!districtFilter || dest.district?.toLowerCase() === districtFilter.toLowerCase()) &&
-           (!terrainFilter || dest.terrain?.toLowerCase() === terrainFilter.toLowerCase()) &&
-           (!attractionFilter || dest.attraction?.toLowerCase() === attractionFilter.toLowerCase());
-});
-
+            return (!districtFilter || dest.district?.toLowerCase() === districtFilter) &&
+                   (!terrainFilter || dest.terrain?.toLowerCase() === terrainFilter) &&
+                   (!attractionFilter || dest.attraction?.toLowerCase() === attractionFilter);
+        });
 
         const container = document.getElementById('destinations-container');
         container.innerHTML = filteredDestinations.map(createDestinationCard).join('');
@@ -176,55 +175,50 @@
 
     async function loadDestinations() {
         try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+            const response = await fetch(apiUrl);
+            const data = await response.json();
 
-        destinations = data.map((place, index) => {
-            // Assign dummy filter values to make filtering functional
             const districtOptions = ["ernakulam", "alappuzha", "idukki", "kannur"];
             const terrainOptions = ["beach", "hill-station", "backwaters", "forest"];
             const attractionOptions = ["nature", "culture", "adventure", "pilgrimage"];
 
-            return {
+            destinations = data.map((place, index) => ({
                 name: place.name || `Place ${index + 1}`,
-                description: place.wikipedia_extracts?.text || "", // try to get description
+                description: place.wikipedia_extracts?.text || "",
                 rate: (Math.random() * 1.5 + 3.5).toFixed(1),
                 kinds: place.kinds,
                 district: districtOptions[index % districtOptions.length],
                 terrain: terrainOptions[index % terrainOptions.length],
                 attraction: attractionOptions[index % attractionOptions.length]
-            };
-        });
+            }));
+
+        } catch (error) {
+            console.error("API fetch failed. Falling back to sample data.", error);
+
+            destinations = [
+                {
+                    name: "Alleppey Backwaters",
+                    description: "Famous for houseboat cruises and serene backwaters",
+                    kinds: "nature,water,relax",
+                    rate: "4.9",
+                    district: "alappuzha",
+                    terrain: "backwaters",
+                    attraction: "nature"
+                },
+                {
+                    name: "Munnar",
+                    description: "Stunning hill station with tea plantations",
+                    kinds: "hill,nature,relax",
+                    rate: "4.8",
+                    district: "idukki",
+                    terrain: "hill-station",
+                    attraction: "nature"
+                }
+            ];
+        }
 
         const container = document.getElementById('destinations-container');
         container.innerHTML = destinations.map(createDestinationCard).join('');
-    } catch (error) {
-        console.error("API fetch failed. Falling back to sample data.", error);
-
-        destinations = [
-            {
-                name: "Alleppey Backwaters",
-                description: "Famous for houseboat cruises and serene backwaters",
-                kinds: "nature,water,relax",
-                rate: "4.9",
-                district: "alappuzha",
-                terrain: "backwaters",
-                attraction: "nature"
-            },
-            {
-                name: "Munnar",
-                description: "Stunning hill station with tea plantations",
-                kinds: "hill,nature,relax",
-                rate: "4.8",
-                district: "idukki",
-                terrain: "hill-station",
-                attraction: "nature"
-            }
-        ];
-
-        const container = document.getElementById('destinations-container');
-        container.innerHTML = destinations.map(createDestinationCard).join('');
-    }
     }
 
     window.onload = loadDestinations;
