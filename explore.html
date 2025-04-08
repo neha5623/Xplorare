@@ -449,29 +449,34 @@
     </footer>
 
     <script>
-        var url_string = window.location.href
-        var addressUrl = new URL(url_string);
-        var place = addressUrl.searchParams.get("place");
-        console.log(place);
-        var placeDetail=`<h1>${place}</h1>`
-        $('#location-name').append(placeDetail);
-        
-        document.getElementById('back').addEventListener('click', function() {
-           
+       
+    var url_string = window.location.href;
+    var addressUrl = new URL(url_string);
+    var place = addressUrl.searchParams.get("place");
+    console.log(place);
+
+    var placeDetail = `<h1>${place}</h1>`;
+    document.getElementById('location-name').innerHTML = placeDetail;
+
+    document.getElementById('back').addEventListener('click', function() {
         window.location.href = 'home2.html'; 
-        });
-        document.getElementById('spots').addEventListener('click', function() {
-            var url = `spots.html?place=${encodeURIComponent(place)}`;
-            window.location.href = url; 
-        });
-        document.getElementById('hotel').addEventListener('click', function() {
-            var url = `hotel.html?place=${encodeURIComponent(place)}`;
-            window.location.href = url;
-        });
-        document.getElementById('Restaurants').addEventListener('click', function() {
-            var url = `restaurants.html?place=${encodeURIComponent(place)}`;
-            window.location.href = url;
-        });
+    });
+
+    document.getElementById('spots').addEventListener('click', function() {
+        var url = `destinations.html?place=${encodeURIComponent(place)}`;
+        window.location.href = url; 
+    });
+
+    document.getElementById('hotel').addEventListener('click', function() {
+        var url = `hotel.html?place=${encodeURIComponent(place)}`;
+        window.location.href = url;
+    });
+
+    document.getElementById('Restaurants').addEventListener('click', function() {
+        var url = `restaurants.html?place=${encodeURIComponent(place)}`;
+        window.location.href = url;
+    });
+
         </script>
         
 </body>
