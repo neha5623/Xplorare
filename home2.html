@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head and style sections remain exactly the same -->
 <head>
-    <!-- All previous styles remain exactly the same -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>XPLORARE - Your Kerala Guide</title>
@@ -83,6 +81,22 @@
             background: #FF4B6E;
             border: none;
             color: white;
+        }
+
+        /* Emergency Button Styles */
+        .emergency-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background-color: red;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .emergency-btn:hover {
+            background-color: darkred;
         }
 
         /* Hero Section */
@@ -207,7 +221,6 @@
         .view-all:hover {
             text-decoration: underline;
         }
-
 
         /* Popular Places */
         .popular-places {
@@ -407,11 +420,11 @@
                 <a href="profile.html" class="profile-btn">Profile</a>
                 <a href="settings.html" class="settings-btn">Settings</a>
             </div>
+            <button class="emergency-btn" onclick="showEmergencyPopup()">SOS</button> <!-- Keep this one -->
         </div>
     </nav>
 
     <section class="hero">
-        
         <div class="hero-content">
             <h1>Discover the Wonders of Kerala</h1>
             <p>Explore breathtaking landscapes, hidden gems, and cultural treasures across God’s Own Country.</p>
@@ -420,36 +433,90 @@
                 <button id="searchBtn">Explore Now</button>
             </div>
             <ul id="suggestions" class="suggestions-list"></ul>
-            
+                      
+
+ 
+
             <style>
+ 
+
                 .suggestions-list {
+ 
+
                     position: absolute;
+ 
+
                     width: 600px;
+ 
+
                     background: white;
+ 
+
                     border: 1px solid #ddd;
+ 
+
                     list-style: none;
+ 
+
                     margin-left: 100px;
+ 
+
                     text-align: left;
+ 
+
                     margin-top: 5px;
+ 
+
                     border-radius: 8px;
+ 
+
                     max-height: 200px;
+ 
+
                     overflow-y: auto;
+ 
+
                     display: none;
+ 
+
                 }
+ 
+
             
+ 
+
                 .suggestions-list li {
+ 
+
                     padding: 10px;
+ 
+
                     cursor: pointer;
+ 
+
                     border: 1px 0px 0px 0px rgb(190, 187, 187) solid;
+ 
+
                 }
+ 
+
             
+ 
+
                 .suggestions-list li:hover {
+ 
+
                     background: #f0f0f0;
+ 
+
                 }
+ 
+
             </style>
+ 
+
             
         </div>
-        
     </section>
 
     <section class="features">
@@ -478,8 +545,6 @@
             <h2 class="section-title">Popular Destinations</h2>
             <a href="destinations.html" class="view-all">View All →</a>
         </div>
-        <!-- Rest of the popular-places section remains the same -->
-
         <div class="places-grid">
             <div class="place-card">
                 <img src="/api/placeholder/400/200" alt="Alleppey Backwaters" class="place-image">
@@ -549,11 +614,11 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2025 EXPLORARE. All rights reserved.</p>
-        </div>
+        </div> 
     </footer>
 
+    <script src="emerg.js"></script>
     <script>
-        
         async function searchLocation() {
             const query = document.getElementById('locationInput').value;
             if (query.length < 3) return; // Start searching after 3 characters
@@ -588,8 +653,8 @@
             document.getElementById('suggestions').style.display = 'none';
         
             console.log("Selected Place:", place.display_name, "Latitude:", place.lat, "Longitude:", place.lon);
-            
         }
+
         const inputBox = document.getElementById("locationInput");
         document.getElementById('searchBtn').addEventListener('click', function() { 
             var place = inputBox.value.trim(); 
@@ -601,7 +666,15 @@
                 alert("Please enter a valid location!");
             }
         });
+
+        function showEmergencyPopup() {
+            const userConfirmed = confirm("Do you want to use the emergency SOS feature?");
+            if (userConfirmed) {
+                alert("Emergency services will be contacted.");
+                // Here you can redirect to an emergency page or perform any other action
+                // For example: window.location.href = "emergency.html";
+            }
+        }
     </script>
-        
 </body>
 </html>
