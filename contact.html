@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us - Xplorare</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #fff;
+      color: #333;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: #fff;
+      border-bottom: 1px solid #eee;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: #ff497c;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #333;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    h1 {
+      color: #ff497c;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 2rem;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .contact-info {
+      background: #ffe6ec;
+      padding: 2rem;
+      border-radius: 15px;
+    }
+    .contact-info h3 {
+      color: #ff497c;
+    }
+    .contact-info p, .contact-info a {
+      margin: 0.5rem 0;
+      display: block;
+      color: #333;
+    }
+    .icons {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+    .icons a {
+      width: 35px;
+      height: 35px;
+      background-color: #ff497c;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      text-decoration: none;
+    }
+    .contact-form {
+      background: #fff;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-radius: 15px;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+    .contact-form button {
+      background-color: #ff497c;
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .map {
+      margin-top: 2rem;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+    }
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">XPLORARE.</div>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="destinations.html">Destinations</a>
+    <a href="activities.html">Activities</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Contact Us</h1>
+  <p class="subtitle">We'd love to hear from you! Get in touch for inquiries, feedback, or support.</p>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h3>Get In Touch</h3>
+      <p><strong>Address:</strong><br>123 Fort Road, Kochi, Kerala, India</p>
+      <p><strong>Phone:</strong><br>+91-98765-43210</p>
+      <p><strong>Email:</strong><br><a href="mailto:info@xplorare.com">info@xplorare.com</a></p>
+
+      <div class="icons">
+        <a href="#"><strong>f</strong></a>
+        <a href="#"><strong>t</strong></a>
+        <a href="#"><strong>in</strong></a>
+        <a href="#"><strong>ig</strong></a>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email Address" required>
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="map">
+    <iframe 
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.510821107999!2d76.26730421428783!3d9.981635976290443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d477f8d1ebf%3A0xe3461608c0ec9a9e!2sFort%20Kochi%2C%20Kochi%2C%20Kerala!5e0!3m2!1sen!2sin!4v1680900000000"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+  </div>
+</div>
+
+</body>
+</html>

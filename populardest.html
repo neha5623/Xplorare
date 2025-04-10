@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Destinations - Explorare</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .destination-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .destination-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+
+  <!-- Header with Back Button and Logo -->
+  <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex items-center">
+      <a href="home2.html" class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-md font-semibold mr-4">
+        <i class="fas fa-arrow-left mr-2"></i> Back
+      </a>
+      <h1 class="text-2xl font-bold text-rose-600 tracking-wider">XPLORARE.</h1>
+    </div>
+  </header>
+
+  <!-- Destination Grid -->
+  <section class="py-12">
+    <div class="container mx-auto px-4">
+      <h2 class="text-4xl font-extrabold text-center mb-12 capitalize">Explore All Destinations</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- 1. Alleppey -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/kayak.jfif" class="w-full h-48 object-cover" alt="Alleppey">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Alleppey Backwaters</h3>
+            <p class="text-gray-600">Venice of the East with serene houseboats</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.9</p>
+          </div>
+        </div>
+
+        <!-- 2. Munnar -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/Munnar.jfif" class="w-full h-48 object-cover" alt="Munnar">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Munnar</h3>
+            <p class="text-gray-600">Rolling hills and endless tea plantations</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.8</p>
+          </div>
+        </div>
+
+        <!-- 3. Fort Kochi -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/fortkochi.jfif" class="w-full h-48 object-cover" alt="Fort Kochi">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Fort Kochi</h3>
+            <p class="text-gray-600">Historic coastal charm with Chinese nets</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.7</p>
+          </div>
+        </div>
+
+        <!-- 4. SM Street -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/sm.jfif" class="w-full h-48 object-cover" alt="SM Street">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">SM Street, Kozhikode</h3>
+            <p class="text-gray-600">Bustling street famous for sweets and shopping</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.6</p>
+          </div>
+        </div>
+
+        <!-- 5. Wayanad Viewpoint -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/trek.jfif" class="w-full h-48 object-cover" alt="Wayanad Viewpoint">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Wayanad Viewpoint</h3>
+            <p class="text-gray-600">Stunning valley views and lush greenery</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.8</p>
+          </div>
+        </div>
+
+        <!-- 6. Varkala Beach -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/varkala.jfif" class="w-full h-48 object-cover" alt="Varkala Beach">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Varkala Beach</h3>
+            <p class="text-gray-600">Scenic cliffs and a peaceful beach vibe</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.9</p>
+          </div>
+        </div>
+
+        <!-- 7. Vagamon -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/Vagomon.jfif" class="w-full h-48 object-cover" alt="Vagamon">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Vagamon</h3>
+            <p class="text-gray-600">Meadows, pine forests, and cool breeze</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.7</p>
+          </div>
+        </div>
+
+        <!-- 8. Ooty -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/ooti.jfif" class="w-full h-48 object-cover" alt="Ooty">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Ooty</h3>
+            <p class="text-gray-600">Queen of hill stations with colonial charm</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.8</p>
+          </div>
+        </div>
+
+        <!-- 9. Thekkady -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden destination-card">
+          <img src="images/thekkadi.jfif" class="w-full h-48 object-cover" alt="Thekkady">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Thekkady</h3>
+            <p class="text-gray-600">Wildlife, forests, and Periyar lake boating</p>
+            <p class="text-yellow-500 mt-2"><i class="fas fa-star"></i> 4.7</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Activities - Explorare</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    .activity-card:hover {
+      transform: translateY(-5px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center space-x-4">
+      <a href="home2.html">
+        <button class="bg-rose-500 hover:bg-rose-600 text-white font-semibold px-5 py-2 rounded-lg text-lg">
+          Back
+        </button>
+      </a>
+      <h1 class="text-2xl font-extrabold text-rose-600 tracking-wide uppercase">XPLORARE.</h1>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="bg-pink-100 py-12 text-center">
+    <h1 class="text-4xl font-bold mb-2">Explore Activities in Kerala</h1>
+    <p class="text-lg text-gray-700">From thrilling adventures to serene experiences, discover what Kerala has to offer!</p>
+  </div>
+
+  <!-- Sticky Tab Navigation -->
+  <nav class="bg-white shadow-md sticky top-[72px] z-10">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-center gap-6">
+      <a href="#top" class="text-rose-600 font-semibold hover:underline">Top Activities</a>
+      <a href="#popular" class="text-rose-600 font-semibold hover:underline">Popular Activities</a>
+    </div>
+  </nav>
+
+  <!-- Top Activities Section -->
+  <section id="top" class="py-12">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">Top Activities This Month</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <!-- Activity Cards -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/kayak.jfif" class="w-full h-48 object-cover" alt="Kayaking">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Kayaking in Alleppey</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Alleppey Backwaters</p>
+            <p class="text-gray-600 mb-2">Glide through the peaceful backwaters in a kayak and experience the lush landscapes.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★★
+              <span class="text-sm text-gray-500 ml-2">(4.9)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/kathakali.jfif" class="w-full h-48 object-cover" alt="Kathakali">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Kathakali Dance Performance</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Kochi Cultural Center</p>
+            <p class="text-gray-600 mb-2">Enjoy a traditional dance drama showcasing Kerala's rich culture in Kochi.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★☆
+              <span class="text-sm text-gray-500 ml-2">(4.6)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/trek.jfif" class="w-full h-48 object-cover" alt="Trekking">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Trekking in Wayanad</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Chembra Peak, Wayanad</p>
+            <p class="text-gray-600 mb-2">Hike through scenic hills, lush forests, and discover wildlife along the trail.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★★
+              <span class="text-sm text-gray-500 ml-2">(5.0)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Activities Section -->
+  <section id="popular" class="py-12">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">Popular Activities</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/spa.jfif" class="w-full h-48 object-cover" alt="Spa">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Ayurvedic Spa Retreat</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Kovalam</p>
+            <p class="text-gray-600 mb-2">Rejuvenate your body and mind with traditional Ayurvedic treatments in Kovalam.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★☆
+              <span class="text-sm text-gray-500 ml-2">(4.7)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/streetfood.jfif" class="w-full h-48 object-cover" alt="Food Tour">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Street Food Tour in Trivandrum</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Chalai Market, Trivandrum</p>
+            <p class="text-gray-600 mb-2">Savor the authentic flavors of Kerala on a guided food walk through local streets.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★☆
+              <span class="text-sm text-gray-500 ml-2">(4.5)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md overflow-hidden activity-card">
+          <img src="images/houseboat.jfif" class="w-full h-48 object-cover" alt="Houseboat">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold">Houseboat Stay in Kumarakom</h3>
+            <p class="text-sm text-rose-600 mb-1">Location: Vembanad Lake, Kumarakom</p>
+            <p class="text-gray-600 mb-2">Enjoy an overnight cruise on the tranquil backwaters surrounded by nature.</p>
+            <div class="flex items-center text-yellow-400 mb-2">
+              ★★★★★
+              <span class="text-sm text-gray-500 ml-2">(5.0)</span>
+            </div>
+            <button class="bg-rose-500 text-white px-4 py-2 rounded hover:bg-rose-600">Book Now</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
