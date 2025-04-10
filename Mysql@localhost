@@ -1,1 +1,15 @@
-ALTER TABLE users ADD profile_pic VARCHAR(255);
+CREATE TRIGGER limit_emergency_contacts
+BEFORE INSERT ON emergency
+FOR EACH ROW
+BEGIN
+    DECLARE contact_count INT;
+
+    SELECT COUNT(*) INTO contact_count
+    FROM emergency
+    WHERE user_id = NEW.user_id;
+
+    IF contact_count >= 3 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Limit of 3 emergency contacts reached.';
+    END IF;
+END;

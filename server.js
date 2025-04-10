@@ -28,11 +28,13 @@ const upload = multer({
 
 app.use(
     cors({
-        origin: "http://127.0.0.1:5500",
-        methods: ["GET", "POST"],
-        credentials: true,
+      origin: "http://127.0.0.1:5500",
+      methods: ["GET", "POST", "PUT", "DELETE"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
     })
-);
+  );
+  
 
 app.use(bodyParser.json());
 
@@ -175,6 +177,123 @@ function verifyToken(req, res, next) {
         }
     );
 });
+// delete account 
+app.delete("/delete-account", verifyToken, async (req, res) => {
+    const { password } = req.body;
+    const userId = req.user.userId;
+    console.log(userId);
+    const dbPromise = db.promise();
+
+    try {
+        const [rows] = await dbPromise.query("SELECT password FROM users WHERE id = ?", [userId]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "User not found." });
+        }
+
+        const match = await bcrypt.compare(password, rows[0].password);
+        if (!match) {
+            return res.status(403).json({ error: "Incorrect password." });
+        }
+
+        await dbPromise.query("DELETE FROM users WHERE id = ?", [userId]);
+        res.json({ message: "Account deleted successfully." });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error." });
+    }
+});
+//update-profile
+app.put("/update-profile", verifyToken, upload.single("profile_pic"), async (req, res) => {
+    const userId = req.user.userId;
+    const { first_name, last_name, password } = req.body;
+    const profile_pic = req.file ? req.file.filename : null;
+
+    try {
+        const updateFields = [];
+        const updateValues = [];
+
+        if (first_name) {
+            updateFields.push("first_name = ?");
+            updateValues.push(first_name);
+        }
+
+        if (last_name) {
+            updateFields.push("last_name = ?");
+            updateValues.push(last_name);
+        }
+
+        if (profile_pic) {
+            updateFields.push("profile_pic = ?");
+            updateValues.push(profile_pic);
+        }
+
+        if (password) {
+            const passwordRegex = /^.{8,}$/;
+            if (!passwordRegex.test(password)) {
+                console.log("Password too short:", password);
+                return res.status(400).json({ error: "Password must be at least 8 characters long." });
+            }
+        
+            const hashedPassword = await bcrypt.hash(password, 10);
+            updateFields.push("password = ?");
+            updateValues.push(hashedPassword);
+        }
+
+        if (updateFields.length === 0) {
+            return res.status(400).json({ error: "No fields to update." });
+        }
+
+        updateValues.push(userId); // For WHERE clause
+        const sql = `UPDATE users SET ${updateFields.join(", ")} WHERE id = ?`;
+
+        db.query(sql, updateValues, (err, result) => {
+            if (err) {
+                console.error("Update error:", err);
+                return res.status(500).json({ error: "Database update failed." });
+            }
+            res.json({ message: "Profile updated successfully!" });
+        });
+    } catch (error) {
+        console.error("Error in update-profile:", error);
+        res.status(500).json({ error: "Server error during profile update." });
+    }
+});
+app.post("/emergency", verifyToken, (req, res) => {
+    const userId = req.user.userId;
+    const { name, phone, relationship } = req.body;
+
+    if (!name || !phone || !relationship) {
+        return res.status(400).json({ error: "All fields are required." });
+    }
+
+    const sql = `INSERT INTO emergency (user_id, name, phone, relationship) VALUES (?, ?, ?, ?)`;
+    db.query(sql, [userId, name, phone, relationship], (err, result) => {
+        if (err) return res.status(500).json({ error: "Database error", details: err.message });
+        res.status(201).json({ message: "Emergency contact added!" });
+    });
+});
+app.get("/emergency", verifyToken, (req, res) => {
+    const userId = req.user.userId;
+
+    db.query("SELECT id, name, phone, relationship FROM emergency WHERE user_id = ?", [userId], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error", details: err.message });
+        res.json(results);
+    });
+});
+app.delete("/emergency/:id", verifyToken, (req, res) => {
+    const contactId = req.params.id;
+    const userId = req.user.userId;
+
+    const sql = `DELETE FROM emergency WHERE id = ? AND user_id = ?`;
+    db.query(sql, [contactId, userId], (err, result) => {
+        if (err) return res.status(500).json({ error: "Database error", details: err.message });
+        if (result.affectedRows === 0) return res.status(404).json({ error: "Contact not found" });
+        res.json({ message: "Emergency contact deleted." });
+    });
+});
+
+
 
 
 

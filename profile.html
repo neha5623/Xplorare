@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xplorare - Profile</title>
+    <style id="theme-style">
+        body {
+          background-color: #FFE4E4;
+          color: #333;
+        }
+      </style>
+      
     <style>
         * {
             margin: 0;
@@ -13,7 +20,7 @@
         }
 
         body {
-            background-color: #FFE4E4;
+          
             min-height: 100vh;
             padding: 20px;
         }
@@ -196,15 +203,14 @@
                 
             </div>
         </div>
-        <div style="display: flex;margin: 0 50px;">
-            <button id="logout-button" style="margin-top: 20px; padding: 10px 20px; background-color: #FF4B6E; color: white; border: none; border-radius: 8px; cursor: pointer;">Logout</button>
-        </div>
+        
         
     </div>
+    <script src="theme.js"></script>
     <script>
         document.querySelector('.edit-profile-btn').addEventListener('click', function() {
             // Add your edit profile logic here
-            window.location.href = 'editprofile.html'; 
+            window.location.href = 'home2.html'; 
         });
         
         document.addEventListener("DOMContentLoaded", async () => {
@@ -263,8 +269,35 @@
                 console.error("Error fetching profile:", error);
                 alert("Something went wrong!");
             }
-        });
+            try {
+  const contactRes = await fetch("http://localhost:5000/emergency", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 
+  const contacts = await contactRes.json();
+  const contactList = document.getElementById("emergency-contacts-list");
+
+  contactList.innerHTML = ""; // Clear the old loading items
+
+  if (contacts.length === 0) {
+    contactList.innerHTML = "<li>No emergency contacts added yet.</li>";
+  } else {
+    contacts.forEach((contact) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<b>${contact.name}</b> (${contact.relationship}) - ${contact.phone}`;
+      contactList.appendChild(li);
+    });
+  }
+} catch (err) {
+  console.error("Failed to load emergency contacts", err);
+  document.getElementById("emergency-contacts-list").innerHTML = "<li>Error loading contacts.</li>";
+}
+
+        });
+        // Load Emergency Contacts
+ 
         // Logout function - Updated to match login2.html functionality
         document.getElementById("logout-button").addEventListener("click", function() {
             localStorage.removeItem("token");

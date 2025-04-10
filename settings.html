@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Xplorare - Settings</title>
+  <style id="theme-style">
+    body {
+      background-color: #FFE4E4;
+      color: #333;
+    }
+  </style>
+  
   <style>
     * {
       margin: 0;
@@ -13,7 +20,7 @@
     }
 
     body {
-      background-color: #FFE4E4;
+    
       min-height: 100vh;
       padding: 20px;
     }
@@ -186,10 +193,7 @@
                   <label for="edit-name">Full Name</label>
                   <input type="text" id="edit-name" placeholder="Enter your name" />
                 </div>
-                <div class="info-item">
-                  <label for="edit-email">Email</label>
-                  <input type="email" id="edit-email" placeholder="Enter your email" />
-                </div>
+                
                 <div class="info-item">
                   <label for="edit-password">New Password</label>
                   <input type="password" id="edit-password1" placeholder="Enter new password" />
@@ -203,82 +207,109 @@
               <!-- RIGHT SIDE -->
               <div class="credentials-right">
                 <div class="info-item">
-                  <label for="profile-pic-upload">Profile Picture</label>
+                  <label for="profile-pic-upload">Update or Upload Profile Picture</label>
                   <input type="file" id="profile-pic-upload" accept="image/*" />
                   <p style="font-size: 12px; color: #999;">Max size: 2MB</p>
                 </div>
-                <div class="info-item">
-                  <label for="edit-gender">Gender</label>
-                  <select id="edit-gender">
-                    <option value="">Select</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <div class="info-item">
-                  <label for="edit-dob">Date of Birth</label>
-                  <input type="date" id="edit-dob" />
-                </div>
+                
+               
               </div>
             </div>
           </div>
           
             <div class="section">
-            <h2>Emergency Contacts</h2>
-            <div class="info-item">
-              <label>Set or edit emergency contacts</label>
-              <ul id="emergency-contacts">
-                <li>Loading...</li>
-                <li>Loading...</li>
-                <li>Loading...</li>
-              </ul>
+                <h2>Emergency Contacts</h2>
+                <form id="emergencyContactForm">
+                    <div style="display: flex;flex-direction:row;justify-content: space-between;">
+                    <div>
+                    <label>
+                      Name:
+                      <br>
+                      <input type="text" id="contactName" required />
+                    </label>
+                    <br />
+                    <br>
+                    
+                    <label>
+                      Phone Number:
+                      <br>
+                      <select id="countryCode" required>
+                        <option value="+91">🇮🇳 India (+91)</option>
+                        <option value="+1">🇺🇸 USA (+1)</option>
+                        <option value="+44">🇬🇧 UK (+44)</option>
+                        <option value="+971">🇦🇪 UAE (+971)</option>
+                        <option value="+61">🇦🇺 Australia (+61)</option>
+                        <!-- Add more countries if needed -->
+                      </select>
+                      <input type="text" id="phoneNumber" required />
+                    </label>
+                    <br />
+                    </div>
+                    <div>
+                    
+                    <label>
+                      Relationship:
+                      <br>
+                      <select id="relationship">
+                        <option value="">Select</option>
+                        <option value="Parent">Parent</option>
+                        <option value="Sibling">Sibling</option>
+                        <option value="Friend">Friend</option>
+                        <option value="Partner">Partner</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </label>
+                    <br />
+                    <br>
+                    <button type="submit" class="edit-profile-btn">Add Emergency Contact</button>
+                    
+                </div>
             </div>
+            <br>
+            <br>
+            </form>
+            <div class="section">
+            <ul id="emergency-contacts" style="margin-left: 20px;">
+                <li>Loading contacts...</li>
+            </ul>
+            </div>
+                
         </div>
         <button class="edit-profile-btn" onclick="saveCredentials()" style="max-width: fit-content;">Save Changes</button>
         </div>
           </div>
       
 
+          <div class="section">
+              <h2>Theme Settings</h2>
+              <div class="info-item">
+                <label><input type="radio" name="theme" value="light" checked> Light Mode</label><br />
+                <label><input type="radio" name="theme" value="dark"> Dark Mode</label>
+              </div>
+              <button class="edit-profile-btn" onclick="applyTheme()">Apply Theme</button>
+            </div>
       <div class="section">
         <h2>Account Settings</h2>
+        <div style="display: flex;justify-content: space-between;">
         <div class="info-item">
-          <h5 style="font-size: 20px;">Delete account</h5>
+            <button class="edit-profile-btn" onclick="confirmDeleteAccount()">Delete Account</button>
         </div>
-       
+        <div class="info-item">
+            <button class="edit-profile-btn" id="logout-button" >Logout</button>
         </div>
-        <div class="section">
-            <h2>Theme Settings</h2>
-            <div class="info-item">
-              <label><input type="radio" name="theme" value="light" checked> Light Mode</label><br />
-              <label><input type="radio" name="theme" value="dark"> Dark Mode</label>
-            </div>
-            <button class="edit-profile-btn" onclick="applyTheme()">Apply Theme</button>
-          </div>
+        </div>
+        </div>
+        </div>
           
-          <div class="section">
-            <h2>Contact Support</h2>
-            <div class="info-item">
-              <label for="support-subject">Subject</label>
-              <input type="text" id="support-subject" placeholder="Subject" />
-            </div>
-            <div class="info-item">
-              <label for="support-message">Message</label>
-              <textarea id="support-message" rows="4" placeholder="Type your message..."></textarea>
-            </div>
-            <button class="edit-profile-btn" onclick="submitSupport()">Send Message</button>
-          </div>
+          
       </div>
     </div>
 
     
   </div>
-
+  <script src="theme.js"></script>
   <script>
-    document.querySelector('.edit-profile-btn').addEventListener('click', function () {
-      window.location.href = 'editprofile.html';
-    });
-
+    
     document.getElementById('back').addEventListener('click', function () {
       window.location.href = 'home2.html';
     });
@@ -305,15 +336,15 @@
 
         if (response.ok) {
             document.getElementById("edit-name").value = `${data.first_name} ${data.last_name}`;
-            document.getElementById("edit-email").value = data.email;
-            document.getElementById("edit-gender").value = data.gender || "";
-            document.getElementById("edit-dob").value = data.dob || "";
+           
+            
+            
 
 
             const initials = `${data.first_name?.charAt(0) || ''}${data.last_name?.charAt(0) || ''}`.toUpperCase();
             const profileImg = document.getElementById("profile-img");
             const initialsDiv = document.getElementById("profile-initials");
-
+            console.log(initials);
             if (data.profile_pic) {
             profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
             profileImg.style.display = "block";
@@ -339,6 +370,218 @@
       alert("Logged out successfully!");
       window.location.href = "login2.html";
     });
+    //saving updated 
+    async function saveCredentials() {
+  const token = localStorage.getItem("token");
+
+  const fullName = document.getElementById("edit-name").value.trim().split(" ");
+  const first_name = fullName[0] || "";
+  const last_name = fullName[1] || "";
+
+  const password1 = document.getElementById("edit-password1").value;
+  const password2 = document.getElementById("edit-password2").value;
+  
+  const profilePicFile = document.getElementById("profile-pic-upload").files[0];
+
+  if (password1 && password1 !== password2) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("first_name", first_name);
+  formData.append("last_name", last_name);
+  
+  if (password1) formData.append("password", password1);
+  if (profilePicFile) formData.append("profile_pic", profilePicFile);
+
+  try {
+    const response = await fetch("http://localhost:5000/update-profile", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Profile updated successfully!");
+      window.location.reload();
+    } else {
+      alert(data.error || "Failed to update profile.");
+    }
+  } catch (err) {
+    console.error("Update error:", err);
+    alert("Something went wrong.");
+  }
+}
+
+    async function confirmDeleteAccount() {
+  const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone.");
+  if (!confirmDelete) return;
+
+  const password = prompt("Please enter your password to confirm:");
+
+  if (!password) {
+    alert("Deletion cancelled. Password was not provided.");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/delete-account", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify({ password })
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert("Account deleted successfully.");
+      localStorage.removeItem("token");
+      window.location.href = "login2.html"; // or your landing page
+    } else {
+      alert(data.error || "Failed to delete account. Please try again.");
+    }
+  } catch (error) {
+    console.error("Error deleting account:", error);
+    alert("An error occurred. Please try again later.");
+  }
+}
+document.getElementById("emergencyContactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = document.getElementById("contactName").value.trim();
+    const countryCode = document.getElementById("countryCode").value.trim();
+    const phone = document.getElementById("phoneNumber").value.trim();
+    const relationship = document.getElementById("relationship").value;
+
+    const nameRegex = /^[A-Za-z ]+$/;
+    const phoneRegex = /^\d{10}$/;
+
+    if (!nameRegex.test(name)) {
+      return alert("Name must only contain letters and spaces.");
+    }
+    if (!phoneRegex.test(phone)) {
+      return alert("Phone number must be exactly 10 digits.");
+    }
+    if (!relationship) {
+      return alert("Please select a relationship.");
+    }
+
+    const fullPhone = `${countryCode}${phone}`;
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:5000/emergency", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name,
+        phone: fullPhone,
+        country: countryCode, // optional: separate if needed
+        relationship,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.message || "Contact saved!");
+        document.getElementById("emergencyContactForm").reset();
+        loadContacts(); 
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to save contact.");
+      });
+  });
+  async function deleteContact(contactId) {
+  const token = localStorage.getItem("token");
+  const confirmDel = confirm("Are you sure you want to delete this contact?");
+  if (!confirmDel) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/emergency/${contactId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(data.message || "Contact deleted.");
+      document.getElementById("emergencyContactForm").reset();
+      loadContacts(); // refresh the list
+      document.getElementById("emergencyContactForm").style.display = "block"; // show form back
+    } else {
+      alert(data.error || "Failed to delete.");
+    }
+  } catch (err) {
+    console.error("Error deleting contact", err);
+    alert("Something went wrong while deleting.");
+  }
+}
+async function loadContacts() {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch("http://localhost:5000/emergency", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
+
+    const contactList = document.getElementById("emergency-contacts");
+    contactList.innerHTML = ""; // clear previous entries
+
+    // Remove old limit message if any
+    const existingMsg = document.getElementById("limit-msg");
+    if (existingMsg) existingMsg.remove();
+
+    if (data.length === 0) {
+      contactList.innerHTML = "<li>No contacts added yet.</li>";
+    } else {
+      data.forEach((contact) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <b>${contact.name}</b> (${contact.relationship}) - ${contact.phone}
+          <button style="margin-left: 10px;" onclick="deleteContact(${contact.id})">❌</button>
+        `;
+        contactList.appendChild(li);
+      });
+    }
+
+    // If 3 contacts, hide form and show message
+    if (data.length >= 3) {
+      document.getElementById("emergencyContactForm").style.display = "none";
+      const msg = document.createElement("p");
+      msg.id = "limit-msg";
+      msg.style.color = "red";
+      msg.innerText = "Maximum of 3 emergency contacts reached.";
+      console.log(msg.innerText)
+      contactList.parentElement.appendChild(msg);
+    } else {
+      document.getElementById("emergencyContactForm").style.display = "block";
+    }
+
+  } catch (err) {
+    console.error("Error loading contacts", err);
+  }
+}
+
+window.loadContacts = loadContacts;
+loadContacts(); 
+
   </script>
 </body>
 </html>
