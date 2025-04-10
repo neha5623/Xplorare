@@ -115,7 +115,7 @@
         }
         #filterpanel div {
             width: 200px;
-            height: 350px;
+            height: 200px;
             margin-top: 60px;
             color: white;
         }
@@ -174,7 +174,7 @@
     <div style="display: grid; grid-template-columns: 6fr 1fr;">
         <section class="features">
             <div style="display: flex;">
-                <h2 class="section-title" style="flex:25;padding-left:40px;" id="xploreeat">Explore Places to Eat!</h2>
+                <h2 class="section-title" style="flex:25;text-align:center;margin: 0 auto;" id="xploreeat">Explore Places to Eat!</h2>
                 <div style="flex:1;cursor:pointer;" id="filter">
                     <svg xmlns="http://www.w3.org/2000/svg" height="48px" viewBox="0 -960 960 960" width="48px" fill="#FF4B6E"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg>
                 </div>
@@ -267,7 +267,7 @@
                 const name = rest.properties.name || "Unnamed Restaurant";
                 const card = $(`
                     <div class="feature-card">
-                        <div><img src="food-placeholder.jpg" class="place-image" alt="restaurant image"></div>
+                        <div><img src="girl.jfif" class="place-image" alt="restaurant image"></div>
                         <div>
                             <h3>${name}</h3>
                             <p>Category: ${rest.properties.kinds}</p>
