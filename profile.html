@@ -144,14 +144,16 @@
         </div>
         
         <div class="profile-header">
-            <div class="profile-picture" id="profile-initials">
-                DF
+            <div class="profile-picture" id="profile-picture-wrapper">
+                <img id="profile-pic" src="" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; display: none;" />
+                <div id="profile-initials" style="font-size: 48px; color: #FF4B6E;">DF</div>
             </div>
             <div class="profile-info">
                 <h1 id="profile-name">Loading...</h1>
                 <p id="profile-email">Loading...</p>
             </div>
         </div>
+        
         
         <div class="profile-sections">
             <div class="section">
@@ -238,7 +240,21 @@
 
                     // Update Profile Initials
                     const initials = data.first_name.charAt(0).toUpperCase() + data.last_name.charAt(0).toUpperCase();
-                    document.getElementById("profile-initials").innerText = initials;
+                    const initialsDiv = document.getElementById("profile-initials");
+                    const profileImg = document.getElementById("profile-pic");
+                    console.log("profile_pic from server:", data.profile_pic);
+
+                    if (data.profile_pic) {
+                        profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
+                      
+                        profileImg.style.display = "block";
+                        initialsDiv.style.display = "none";
+                    } else {
+                        initialsDiv.innerText = initials;
+                        initialsDiv.style.display = "flex";
+                        profileImg.style.display = "none";
+                    }
+
                 } else {
                     alert(data.error || "Failed to load profile.");
                     window.location.href = "login2.html";

@@ -220,6 +220,11 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="profile-pic-upload">Profile Picture</label>
+                    <input type="file" id="profile-pic-upload" accept="image/*" />
+                    <p style="font-size: 12px; color: #999;">Max size: 2MB</p>
+                </div>
                 
                 <div class="form-group">
                     <label for="dob">Date of Birth</label>
@@ -233,38 +238,36 @@
             </div>
         </div>
     </div>
-
-    <script>
-document.getElementById('signup-form').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const formData = {
-        firstName: document.getElementById('firstname').value.trim(),
-        lastName: document.getElementById('lastname').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        password: document.getElementById('password').value,
-        gender: document.querySelector('input[name="gender"]:checked')?.value,
-        dob: document.getElementById('dob').value
-    };
-
-    try {
-        const response = await fetch("http://localhost:5000/signup", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(formData),
-        });
-
-        const result = await response.json();
-        if (result.error) {
-            alert("Signup failed: " + result.error);
-        } else {
-            alert("Signup successful!");
-            window.location.href = "login2.html";
+<script>
+    document.getElementById('signup-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+    
+        const form = new FormData();
+        form.append("firstName", document.getElementById('firstname').value.trim());
+        form.append("lastName", document.getElementById('lastname').value.trim());
+        form.append("email", document.getElementById('email').value.trim());
+        form.append("password", document.getElementById('password').value);
+        form.append("gender", document.querySelector('input[name="gender"]:checked')?.value);
+        form.append("dob", document.getElementById('dob').value);
+        form.append("profilePic", document.getElementById('profile-pic-upload').files[0]);
+    
+        try {
+            const response = await fetch("http://localhost:5000/signup", {
+                method: "POST",
+                body: form
+            });
+    
+            const result = await response.json();
+            if (result.error) {
+                alert("Signup failed: " + result.error);
+            } else {
+                alert("Signup successful!");
+                window.location.href = "login2.html";
+            }
+        } catch (error) {
+            alert("Something went wrong!");
         }
-    } catch (error) {
-        alert("Something went wrong!");
-    }
-});
-    </script>
+    });
+</script>  
 </body>
 </html>

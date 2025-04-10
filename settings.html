@@ -165,7 +165,10 @@
     </div>
 
     <div class="profile-header">
-      <div class="profile-picture" id="profile-initials">?</div>
+        <div class="profile-picture" id="profile-picture-container">
+            <img id="profile-img" src="" alt="Profile Picture" style="display: none; width: 100%; height: 100%; border-radius: 50%;" />
+            <span id="profile-initials">?</span>
+          </div>          
       <div class="profile-info">
         <h1>Settings</h1>
       </div>
@@ -307,8 +310,20 @@
             document.getElementById("edit-dob").value = data.dob || "";
 
 
-          const initials = `${data.first_name?.charAt(0) || ''}${data.last_name?.charAt(0) || ''}`.toUpperCase();
-          document.getElementById("profile-initials").innerText = initials || "?";
+            const initials = `${data.first_name?.charAt(0) || ''}${data.last_name?.charAt(0) || ''}`.toUpperCase();
+            const profileImg = document.getElementById("profile-img");
+            const initialsDiv = document.getElementById("profile-initials");
+
+            if (data.profile_pic) {
+            profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
+            profileImg.style.display = "block";
+            initialsDiv.style.display = "none";
+            } else {
+            initialsDiv.innerText = initials || "?";
+            initialsDiv.style.display = "flex";
+            profileImg.style.display = "none";
+            }
+
         } else {
           alert(data.error || "Failed to load profile.");
           window.location.href = "login2.html";

@@ -4,8 +4,27 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
-
+const multer = require("multer");
+const path = require("path");
 const app = express();
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, "uploads/"); // ensure this folder exists
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 2 * 1024 * 1024 } // 2MB limit
+});
+
+
 
 app.use(
     cors({
@@ -54,8 +73,9 @@ function validateInput(firstName, lastName, email, password) {
 }
 
 // ✅ Signup Route
-app.post("/signup", (req, res) => {
+app.post("/signup", upload.single("profilePic"), (req, res) => {
     const { firstName, lastName, email, password, gender, dob } = req.body;
+    const profilePic = req.file ? req.file.filename : null;
 
     const validationError = validateInput(firstName, lastName, email, password);
     if (validationError) {
@@ -63,26 +83,25 @@ app.post("/signup", (req, res) => {
     }
 
     db.query("SELECT email FROM users WHERE email = ?", [email], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: "Database error", details: err.message });
-        }
-        if (results.length > 0) {
-            return res.status(400).json({ error: "Email already exists!" });
-        }
+        if (err) return res.status(500).json({ error: "Database error", details: err.message });
+        if (results.length > 0) return res.status(400).json({ error: "Email already exists!" });
 
         bcrypt.hash(password, 10, (err, hash) => {
-            if (err) return res.status(500).json({ error: "Error hashing password" });
+            if (err) return res.status(500).json({ error: "Hashing error" });
 
-            const sql = "INSERT INTO users (first_name, last_name, email, password, gender, dob) VALUES (?, ?, ?, ?, ?, ?)";
-            db.query(sql, [firstName, lastName, email, hash, gender, dob], (err, result) => {
-                if (err) {
-                    return res.status(500).json({ error: "Database error", details: err.message });
-                }
+            const sql = `
+                INSERT INTO users (first_name, last_name, email, password, gender, dob, profile_pic)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `;
+            db.query(sql, [firstName, lastName, email, hash, gender, dob, profilePic], (err, result) => {
+                if (err) return res.status(500).json({ error: "Database error", details: err.message });
+
                 res.status(201).json({ message: "User registered successfully!" });
             });
         });
     });
 });
+
 
 // ✅ Login Route (with Email & Password Validation)
 app.post("/login", (req, res) => {
@@ -138,20 +157,25 @@ function verifyToken(req, res, next) {
       next();
     });
   }
-app.get("/profile", verifyToken, (req, res) => {
+  app.get("/profile", verifyToken, (req, res) => {
     const userId = req.user.userId;
 
-    db.query("SELECT first_name, last_name, email, gender, dob, created_at FROM users WHERE id = ?", [userId], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: "Database error", details: err.message });
-        }
-        if (results.length === 0) {
-            return res.status(404).json({ error: "User not found." });
-        }
+    db.query(
+        "SELECT first_name, last_name, email, gender, dob, created_at, profile_pic FROM users WHERE id = ?",
+        [userId],
+        (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: "Database error", details: err.message });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: "User not found." });
+            }
 
-        res.json(results[0]); // Send user profile data
-    });
+            res.json(results[0]); // Send user profile data including profile_pic
+        }
+    );
 });
+
 
 
 app.listen(5000, () => {
