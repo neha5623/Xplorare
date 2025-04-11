@@ -21,6 +21,35 @@ CREATE TABLE emergency (
 );
 ALTER TABLE users ADD profile_pic VARCHAR(255);
 SELECT * FROM users;
+CREATE TABLE password_resets (
+  email VARCHAR(255) NOT NULL,
+  otp VARCHAR(6) NOT NULL,
+  expires_at DATETIME NOT NULL
+);
+CREATE TABLE feedback (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  message TEXT,
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
 
-
-
+DROP TABLE IF EXISTS feedback;
+COMMIT;
+CREATE TABLE feedback (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+COMMIT;
+SELECT * FROM feedback;
+ALTER TABLE users ADD COLUMN userphone VARCHAR(15);
+COMMIT;
+SELECT * FROM emergency;
+DELETE FROM users WHERE id=15;
+COMMIT;
+SELECT * FROM 

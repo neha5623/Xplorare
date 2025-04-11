@@ -124,19 +124,27 @@
         grid-template-columns: 1fr;
       }
     }
+    .edit-profile-btn {
+            padding: 8px 20px;
+            background-color: #FF4B6E;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: #ff3459;
+        }
   </style>
 </head>
 <body>
 
 <header>
   <div class="logo">XPLORARE.</div>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="destinations.html">Destinations</a>
-    <a href="activities.html">Activities</a>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+  <button id="back" class="edit-profile-btn">Back</button>
 </header>
 
 <div class="container">
@@ -159,12 +167,13 @@
     </div>
 
     <div class="contact-form">
-      <form>
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email Address" required>
-        <textarea rows="5" placeholder="Your Message" required></textarea>
+      <div id="alert-box" class="alert"></div>
+      <br>
+      <form id="contactForm">
+        <textarea name="message" rows="10" placeholder="Your Message" required></textarea>
         <button type="submit">Send Message</button>
       </form>
+      
     </div>
   </div>
 
@@ -178,5 +187,39 @@
   </div>
 </div>
 <script src="theme.js"></script>
+<script>
+document.getElementById("back").onclick = function() {
+    window.location.href = 'home2.html'; 
+};
+
+  function showAlert(message, type = "error") {
+  const alertBox = document.getElementById("alert-box");
+  alertBox.textContent = message;
+  alertBox.className = "alert " + (type === "success" ? "alert-success" : "alert-error");
+  alertBox.style.display = "block";
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 5000);
+}
+  document.getElementById("contactForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const message = e.target.message.value.trim();
+
+    const token = localStorage.getItem("token"); // in case user is logged in
+
+    const res = await fetch("http://localhost:5000/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+         Authorization: `Bearer ${token}` 
+      },
+      body: JSON.stringify({message })
+    });
+
+    const data = await res.json();
+    showAlert("Thank you for your feedback")
+  });
+</script>
+
 </body>
 </html>

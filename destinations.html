@@ -472,12 +472,17 @@
 
             destinations.forEach(function(destination) {
                 const name = destination.properties.name || "Unnamed Attraction";
+                var googleSearchLink = `https://www.google.com/search?q=${encodeURIComponent(name + " " + place)}`;
                 const card = $(
                     `<div class="feature-card" style="display:grid;grid-template-columns:1fr 3fr;gap:25px;">
                         <div><img src="girl.jfif" alt="Preview" style="height:200px;width:100%;object-fit:cover"></div>
                         <div>
                             <h3>${name}</h3>
                             <p>Category: ${destination.properties.kinds}</p>
+                            <br>
+                            <a href="${googleSearchLink}" target="_blank" style="color:#FF4B6E; text-decoration:underline; font-weight:bold;">
+                        🔍 More Info
+                    </a>
                         </div>
                     </div>`
                 );

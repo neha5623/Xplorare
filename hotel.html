@@ -526,7 +526,9 @@
             hotels.forEach(function(hotel) {
                 
                 var hotelName = hotel.properties.name || "Unnamed Hotel";
+                
                 console.log(hotel.properties);
+                var googleSearchLink = `https://www.google.com/search?q=${encodeURIComponent(hotelName + " " + place)}`;
                 var hotelCard = $(`
             <div class="feature-card" style="opacity: 0; transform: translateY(20px);display:grid;grid-template-columns:1fr 3fr;gap:25px;">
                
@@ -536,8 +538,12 @@
                 <p>Rating:</strong> ${hotel.properties.rate}</p>
                 <br>
                 <p>Price:</strong> ${hotel.properties.price ? hotel.properties.price : 'Not available'}</p>
+                <br>
+                <a href="${googleSearchLink}" target="_blank" style="color:#FF4B6E; text-decoration:underline; font-weight:bold;">
+                        🔍 More Info
+                    </a>
                 </div>
-               
+                
             </div>
         `);
 

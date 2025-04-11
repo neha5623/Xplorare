@@ -7,7 +7,17 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const path = require("path");
 const app = express();
+const nodemailer = require("nodemailer");
+
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "neha.naseer610@gmail.com",       // replace with your email
+    pass:"nnvmmbardxtucsuf "
+  },
+});
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -163,7 +173,7 @@ function verifyToken(req, res, next) {
     const userId = req.user.userId;
 
     db.query(
-        "SELECT first_name, last_name, email, gender, dob, created_at, profile_pic FROM users WHERE id = ?",
+        "SELECT first_name, last_name, email, gender, dob, created_at, profile_pic ,userphone FROM users WHERE id = ?",
         [userId],
         (err, results) => {
             if (err) {
@@ -174,6 +184,9 @@ function verifyToken(req, res, next) {
             }
 
             res.json(results[0]); // Send user profile data including profile_pic
+            console.log(results[0]);
+
+
         }
     );
 });
@@ -206,7 +219,7 @@ app.delete("/delete-account", verifyToken, async (req, res) => {
 //update-profile
 app.put("/update-profile", verifyToken, upload.single("profile_pic"), async (req, res) => {
     const userId = req.user.userId;
-    const { first_name, last_name, password } = req.body;
+    const { first_name, last_name, password ,userphone} = req.body;
     const profile_pic = req.file ? req.file.filename : null;
 
     try {
@@ -227,7 +240,10 @@ app.put("/update-profile", verifyToken, upload.single("profile_pic"), async (req
             updateFields.push("profile_pic = ?");
             updateValues.push(profile_pic);
         }
-
+        if (userphone) {
+            updateFields.push("userphone = ?");
+            updateValues.push(userphone);
+        }
         if (password) {
             const passwordRegex = /^.{8,}$/;
             if (!passwordRegex.test(password)) {
@@ -262,17 +278,29 @@ app.put("/update-profile", verifyToken, upload.single("profile_pic"), async (req
 app.post("/emergency", verifyToken, (req, res) => {
     const userId = req.user.userId;
     const { name, phone, relationship } = req.body;
-
+  
     if (!name || !phone || !relationship) {
-        return res.status(400).json({ error: "All fields are required." });
+      return res.status(400).json({ error: "All fields are required." });
     }
-
-    const sql = `INSERT INTO emergency (user_id, name, phone, relationship) VALUES (?, ?, ?, ?)`;
-    db.query(sql, [userId, name, phone, relationship], (err, result) => {
+  
+    // Validate userphone before proceeding
+    db.query("SELECT userphone FROM users WHERE id = ?", [userId], (err, results) => {
+      if (err) return res.status(500).json({ error: "Database error." });
+      
+      if (!results[0] || !results[0].userphone) {
+        return res.status(400).json({ error: "Please update your profile with a valid phone number first." });
+      }
+  
+      // Proceed to insert
+      const sql = `INSERT INTO emergency (user_id, name, phone, relationship) VALUES (?, ?, ?, ?)`;
+      db.query(sql, [userId, name, phone, relationship], (err, result) => {
         if (err) return res.status(500).json({ error: "Database error", details: err.message });
         res.status(201).json({ message: "Emergency contact added!" });
+      });
     });
-});
+  });
+  
+
 app.get("/emergency", verifyToken, (req, res) => {
     const userId = req.user.userId;
 
@@ -292,11 +320,120 @@ app.delete("/emergency/:id", verifyToken, (req, res) => {
         res.json({ message: "Emergency contact deleted." });
     });
 });
+//OTP-SEND
+app.post("/send-otp", async (req, res) => {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required." });
+  
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60000); // expires in 10 mins
+  
+    // Save OTP to DB
+    db.query("INSERT INTO password_resets (email, otp, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE otp = ?, expires_at = ?",
+      [email, otp, expiresAt, otp, expiresAt],
+      (err) => {
+        if (err) return res.status(500).json({ error: "Database error." });
+  
+        // Send email
+        const mailOptions = {
+          from: "youremail@gmail.com",
+          to: email,
+          subject: "Xplorare Password Reset OTP",
+          text: `Your OTP for resetting password is: ${otp}. It is valid for 10 minutes.`,
+        };
+  
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error(error);
+            return res.status(500).json({ error: "Failed to send OTP." });
+          }
+          res.json({ message: "OTP sent to email." });
+        });
+      }
+    );
+  });
+  
+//OTP-VERIFY
+app.post("/verify-otp", (req, res) => {
+    const { email, otp } = req.body;
+    if (!email || !otp) return res.status(400).json({ error: "Email and OTP required." });
+  
+    db.query(
+      "SELECT * FROM password_resets WHERE email = ? AND otp = ?",
+      [email, otp],
+      (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error." });
+        if (results.length === 0) return res.status(400).json({ error: "Invalid OTP." });
+  
+        const expiresAt = new Date(results[0].expires_at);
+        if (new Date() > expiresAt) {
+          return res.status(400).json({ error: "OTP expired." });
+        }
+  
+        res.json({ message: "OTP verified successfully." });
+      }
+    );
+  });
+//reset
+app.post("/reset-password", async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: "Missing data." });
+    }
+  
+    // Validate OTP first
+    db.query("SELECT * FROM password_resets WHERE email = ? AND otp = ?", [email, otp], async (err, results) => {
+      if (err) return res.status(500).json({ error: "Database error." });
+      if (results.length === 0) return res.status(400).json({ error: "Invalid OTP." });
+  
+      const expiresAt = new Date(results[0].expires_at);
+      if (new Date() > expiresAt) {
+        return res.status(400).json({ error: "OTP expired." });
+      }
+  
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      db.query("UPDATE users SET password = ? WHERE email = ?", [hashedPassword, email], (err) => {
+        if (err) return res.status(500).json({ error: "Failed to update password." });
+  
+        db.query("DELETE FROM password_resets WHERE email = ?", [email]); // cleanup
+        res.json({ message: "Password reset successful!" });
+      });
+    });
+  });
+  
+  app.post("/emailcheck", (req, res) => {
+    const { email } = req.body;
+    db.query("SELECT id FROM users WHERE email = ?", [email], (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: "Database error" });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Email not registered." });
+      }
+      return res.json({ message: "Email is registered." });
+    });
+  });
+//feebdack  
+  app.post("/feedback", verifyToken, (req, res) => {
+    const { message } = req.body;
+    const userId = req.user.userId;
 
-
-
-
-
+  
+    if (!message || !userId) {
+        return res.status(400).json({ error: "Message and user required." });
+      }
+    
+      const sql = "INSERT INTO feedback (user_id, message) VALUES (?, ?)";
+      db.query(sql, [userId, message], (err, result) => {
+        if (err) {
+          console.error("DB error:", err);
+          return res.status(500).json({ error: "Database error." });
+        }
+        res.status(200).json({ message: "Feedback received. Thank you!" });
+      });
+    });
+  
 app.listen(5000, () => {
     console.log("Server running on port 5000");
 });

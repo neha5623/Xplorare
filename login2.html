@@ -299,21 +299,6 @@
     </div>
 
     <script>
-        // Check if user is already logged in
-        /*document.addEventListener("DOMContentLoaded", function() {
-            if (localStorage.getItem("token")) {
-                window.location.href = "home2.html";
-            }
-            
-            // Check for redirect message
-            const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            if (message) {
-                showAlert(message, message.includes("success") ? "success" : "error");
-            }
-        });*/
-
-        // Helper function to show alerts
         function showAlert(message, type = "error") {
             const alertBox = document.getElementById("alert-box");
             alertBox.textContent = message;

@@ -211,6 +211,10 @@
                   <input type="file" id="profile-pic-upload" accept="image/*" />
                   <p style="font-size: 12px; color: #999;">Max size: 2MB</p>
                 </div>
+                <div class="info-item">
+                  <label for="userphone">Your Phone Number</label>
+                  <input type="text" id="userphone" placeholder="Enter 10-digit phone number" />
+                </div>
                 
                
               </div>
@@ -219,6 +223,7 @@
           
             <div class="section">
                 <h2>Emergency Contacts</h2>
+                <div id="alert-box" class="alert"></div>
                 <form id="emergencyContactForm">
                     <div style="display: flex;flex-direction:row;justify-content: space-between;">
                     <div>
@@ -309,61 +314,74 @@
   </div>
   <script src="theme.js"></script>
   <script>
-    
+    function showAlert(message, type = "error") {
+  const alertBox = document.getElementById("alert-box");
+  alertBox.textContent = message;
+  alertBox.className = "alert " + (type === "success" ? "alert-success" : "alert-error");
+  alertBox.style.display = "block";
+  
+}
     document.getElementById('back').addEventListener('click', function () {
       window.location.href = 'home2.html';
     });
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-      if (!token) {
-        alert("You must log in first!");
-        window.location.href = "login2.html";
-        return;
-      }
+  if (!token) {
+    alert("You must log in first!");
+    window.location.href = "login2.html";
+    return;
+  }
 
-      try {
-        const response = await fetch("http://localhost:5000/profile", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            document.getElementById("edit-name").value = `${data.first_name} ${data.last_name}`;
-           
-            
-            
-
-
-            const initials = `${data.first_name?.charAt(0) || ''}${data.last_name?.charAt(0) || ''}`.toUpperCase();
-            const profileImg = document.getElementById("profile-img");
-            const initialsDiv = document.getElementById("profile-initials");
-            console.log(initials);
-            if (data.profile_pic) {
-            profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
-            profileImg.style.display = "block";
-            initialsDiv.style.display = "none";
-            } else {
-            initialsDiv.innerText = initials || "?";
-            initialsDiv.style.display = "flex";
-            profileImg.style.display = "none";
-            }
-
-        } else {
-          alert(data.error || "Failed to load profile.");
-          window.location.href = "login2.html";
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        alert("Something went wrong!");
-      }
+  try {
+    const response = await fetch("http://localhost:5000/profile", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      document.getElementById("edit-name").value = `${data.first_name} ${data.last_name}`;
+      document.getElementById("userphone").value = data.userphone || "";// ✅ set phone number
+
+      const initials = `${data.first_name?.charAt(0) || ''}${data.last_name?.charAt(0) || ''}`.toUpperCase();
+      const profileImg = document.getElementById("profile-img");
+      const initialsDiv = document.getElementById("profile-initials");
+
+      if (data.profile_pic) {
+        profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
+        profileImg.style.display = "block";
+        initialsDiv.style.display = "none";
+      } else {
+        initialsDiv.innerText = initials || "?";
+        initialsDiv.style.display = "flex";
+        profileImg.style.display = "none";
+      }
+      const phoneInput = document.getElementById("userphone");
+      if (data.userphone) {
+        phoneInput.value = data.userphone;
+        phoneInput.setAttribute("data-saved", data.userphone); // for reuse in loadContacts
+        loadContacts();
+      } else {
+        phoneInput.value = "";
+        showAlert("Add your contact info first!");
+        document.getElementById("emergencyContactForm").style.display="none";
+      }// ✅ load emergency contacts
+    } else {
+      alert(data.error || "Failed to load profile.");
+      window.location.href = "login2.html";
+    }
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    alert("Something went wrong!");
+  }
+});
+
 
     document.getElementById("logout-button").addEventListener("click", function () {
       localStorage.removeItem("token");
@@ -373,6 +391,12 @@
     //saving updated 
     async function saveCredentials() {
   const token = localStorage.getItem("token");
+  const userphone = document.getElementById("userphone").value.trim();
+const phoneRegex = /^\d{10}$/;
+
+if (userphone && !phoneRegex.test(userphone)) {
+  return alert("Phone number must be exactly 10 digits.");
+}
 
   const fullName = document.getElementById("edit-name").value.trim().split(" ");
   const first_name = fullName[0] || "";
@@ -394,6 +418,7 @@
   
   if (password1) formData.append("password", password1);
   if (profilePicFile) formData.append("profile_pic", profilePicFile);
+if (userphone) formData.append("userphone", userphone);
 
   try {
     const response = await fetch("http://localhost:5000/update-profile", {
@@ -455,9 +480,9 @@
     alert("An error occurred. Please try again later.");
   }
 }
+
 document.getElementById("emergencyContactForm").addEventListener("submit", function (e) {
     e.preventDefault();
-
     const name = document.getElementById("contactName").value.trim();
     const countryCode = document.getElementById("countryCode").value.trim();
     const phone = document.getElementById("phoneNumber").value.trim();

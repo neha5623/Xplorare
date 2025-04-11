@@ -272,6 +272,7 @@
             }
             restaurants.forEach(rest => {
                 const name = rest.properties.name || "Unnamed Restaurant";
+                var googleSearchLink = `https://www.google.com/search?q=${encodeURIComponent(name + " " + place)}`;
                 const card = $(`
                     <div class="feature-card">
                         <div><img src="girl.jfif" class="place-image" alt="restaurant image"></div>
@@ -279,6 +280,10 @@
                             <h3>${name}</h3>
                             <p>Category: ${rest.properties.kinds}</p>
                             <p>Rating: ${rest.properties.rate || "N/A"}</p>
+                            <br>
+                            <a href="${googleSearchLink}" target="_blank" style="color:#FF4B6E; text-decoration:underline; font-weight:bold;">
+                        🔍 More Info
+                    </a>
                         </div>
                     </div>
                 `);

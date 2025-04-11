@@ -280,7 +280,27 @@
                     >
                     <div class="error-message" id="email-error">Please enter a valid email address</div>
                 </div>
-                
+                <div class="form-group" id="otp-group" style="display:none;">
+                    <label for="otp">Enter OTP</label>
+                    <input type="text" id="otp" placeholder="Enter 6-digit OTP" />
+                    <div class="error-message" id="otp-error">Please enter a valid OTP</div>
+                  </div>
+                  <button type="button" class="forgot-btn" id="verify-otp-button" style="display: none;">Verify OTP</button>
+                  <br>
+                  <div id="reset-password-group" style="display: none;">
+                    <div class="form-group">
+                      <label for="new-password">New Password</label>
+                      <input type="password" id="new-password" placeholder="Enter new password" />
+                      <div class="error-message" id="new-password-error">Password must be at least 8 characters.</div>
+                    </div>
+                    <div class="form-group">
+                      <label for="confirm-password">Confirm Password</label>
+                      <input type="password" id="confirm-password" placeholder="Confirm new password" />
+                      <div class="error-message" id="confirm-password-error">Passwords do not match.</div>
+                    </div>
+                    <button type="button" class="forgot-btn" id="reset-password-button">Reset Password</button>
+                  </div>
+                    <br>                  
                 <button type="submit" class="forgot-btn" id="forgot-button">Send reset link via email</button>
             </form>
            
@@ -293,90 +313,149 @@
         </div>
     </div>
     <script src="theme.js"></script>
-    <script>
-        // Validate form fields
-        function validateField(field, regex, errorMsg) {
-            const value = field.value.trim();
-            const formGroup = field.parentElement;
-            const errorElement = formGroup.querySelector(".error-message");
-    
-            if (!regex.test(value)) {
-                formGroup.classList.add("error");
-                errorElement.textContent = errorMsg;
-                return false;
-            } else {
-                formGroup.classList.remove("error");
-                errorElement.textContent = "";
-                return true;
-            }
-        }
-    
-        // Function to show alert messages
-        function showAlert(message, type = "error") {
-            const messageElement = document.getElementById("message");
-            messageElement.textContent = message;
-            messageElement.style.color = type === "success" ? "green" : "red";
-        }
-    
-        // Form submission handler for Forgot Password
-        document.getElementById("forgot-form").addEventListener("submit", async function(event) {
-            event.preventDefault();
-    
-            const email = document.getElementById("email");
-            const forgotButton = document.getElementById("forgot-button");
-    
-            // Email validation
-            const emailValid = validateField(
-                email,
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                "Please enter a valid email address"
-            );
-    
-            if (!emailValid) {
-                return;
-            }
-    
-            // Show loading state
-            forgotButton.classList.add("loading");
-            forgotButton.disabled = true;
-    
-            try {
-                const response = await fetch("http://localhost:5000/forgot-password", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ email: email.value.trim() }),
-                });
-    
-                const data = await response.json();
-    
-                // Remove loading state
-                forgotButton.classList.remove("loading");
-                forgotButton.disabled = false;
-    
-                if (response.ok) {
-                    showAlert("A password reset link has been sent to your email.", "success");
-                } else {
-                    showAlert(data.message || "Failed to send reset link. Please try again.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                forgotButton.classList.remove("loading");
-                forgotButton.disabled = false;
-                showAlert("Connection error. Please try again later.");
-            }
-        });
-    
-        // Input validation on blur
-        document.getElementById("email").addEventListener("blur", function () {
-            validateField(
-                this,
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                "Please enter a valid email address"
-            );
-        });
-    </script>
+<script>
+function showAlert(message, type = "error") {
+  const alertBox = document.getElementById("alert-box");
+  alertBox.textContent = message;
+  alertBox.className = "alert " + (type === "success" ? "alert-success" : "alert-error");
+  alertBox.style.display = "block";
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 5000);
+}
+
+function validateField(field, regex, errorMsg) {
+  const value = field.value.trim();
+  const formGroup = field.parentElement;
+  const errorElement = formGroup.querySelector(".error-message");
+
+  if (!regex.test(value)) {
+    formGroup.classList.add("error");
+    errorElement.textContent = errorMsg;
+    errorElement.style.display = "block";
+    return false;
+  } else {
+    formGroup.classList.remove("error");
+    errorElement.textContent = "";
+    errorElement.style.display = "none";
+    return true;
+  }
+}
+
+document.getElementById("forgot-form").addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const emailField = document.getElementById("email");
+  const email = emailField.value.trim();
+
+  const emailValid = validateField(
+    emailField,
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    "Please enter a valid email address"
+  );
+  if (!emailValid) return;
+
+  // Check if email is registered
+  const emailCheck = await fetch("http://localhost:5000/emailcheck", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+
+  const emailRes = await emailCheck.json();
+  if (!emailCheck.ok) {
+    showAlert(emailRes.error || "Email not registered.");
+    return;
+  }
+
+  // Send OTP
+  const response = await fetch("http://localhost:5000/send-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  });
+
+  const data = await response.json();
+  if (response.ok) {
+    showAlert("OTP sent to your email.", "success");
+    document.getElementById("otp-group").style.display = "block";
+    document.getElementById("verify-otp-button").style.display = "block";
+  } else {
+    showAlert(data.error || "Failed to send OTP.");
+  }
+});
+
+document.getElementById("verify-otp-button").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const otp = document.getElementById("otp").value.trim();
+
+  if (!/^\d{6}$/.test(otp)) {
+    showAlert("Enter a valid 6-digit OTP.");
+    return;
+  }
+
+  const response = await fetch("http://localhost:5000/verify-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, otp })
+  });
+
+  const data = await response.json();
+  if (response.ok) {
+    showAlert("OTP verified. Proceed to reset your password.", "success");
+    document.getElementById("reset-password-group").style.display = "block";
+  } else {
+    showAlert(data.error || "OTP verification failed.");
+  }
+});
+
+document.getElementById("reset-password-button").addEventListener("click", async () => {
+  const email = document.getElementById("email").value.trim();
+  const newPassword = document.getElementById("new-password").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+
+  const passwordRegex = /^.{8,}$/;
+  let valid = true;
+
+  if (!passwordRegex.test(newPassword)) {
+    document.getElementById("new-password-error").style.display = "block";
+    valid = false;
+  } else {
+    document.getElementById("new-password-error").style.display = "none";
+  }
+
+  if (newPassword !== confirmPassword) {
+    document.getElementById("confirm-password-error").style.display = "block";
+    valid = false;
+  } else {
+    document.getElementById("confirm-password-error").style.display = "none";
+  }
+
+  if (!valid) return;
+const otp = document.getElementById("otp").value.trim(); 
+  const response = await fetch("http://localhost:5000/reset-password", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, otp, newPassword })
+});
+
+
+  const data = await response.json();
+  if (response.ok) {
+    showAlert("Password has been reset successfully!", "success");
+    setTimeout(() => {
+      window.location.href = "login2.html";
+    }, 2000);
+  } else {
+    showAlert(data.error || "Failed to reset password.");
+  }
+});
+</script>
+
+
+  
+
+
+ </script>
     
 </body>
 </html>

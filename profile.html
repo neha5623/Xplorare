@@ -192,12 +192,8 @@
                 <h2>Emergency Contacts</h2>
                 <div class="info-item">
                     <label>Contacts</label>
-                    <ul>
-                        
-                            <p>loading</p>
-                            <p>loading</p>
-                            <p>loading</p>
-                        
+                    <ul id="emergency-contacts-list">
+                        <li>loading</li>
                     </ul>
                 </div>
                 
@@ -214,99 +210,78 @@
         });
         
         document.addEventListener("DOMContentLoaded", async () => {
-            // Check for token from login page
-            const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-            if (!token) {
-                alert("You must log in first!");
-                window.location.href = "login2.html";
-                return;
-            }
-
-            try {
-                const response = await fetch("http://localhost:5000/profile", {
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    // Update Profile Info
-                    document.getElementById("profile-name").innerText = `${data.first_name} ${data.last_name}`;
-                    document.getElementById("profile-email").innerText = data.email;
-                    document.getElementById("full-name").innerText = `${data.first_name} ${data.last_name}`;
-                    document.getElementById("gender").innerText = data.gender || "Not specified";
-                    document.getElementById("dob").innerText = data.dob || "Not specified";
-                    document.getElementById("joined").innerText = new Date(data.created_at).toDateString();
-                    document.getElementById("email").innerText = data.email;
-
-                    // Update Profile Initials
-                    const initials = data.first_name.charAt(0).toUpperCase() + data.last_name.charAt(0).toUpperCase();
-                    const initialsDiv = document.getElementById("profile-initials");
-                    const profileImg = document.getElementById("profile-pic");
-                    console.log("profile_pic from server:", data.profile_pic);
-
-                    if (data.profile_pic) {
-                        profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
-                      
-                        profileImg.style.display = "block";
-                        initialsDiv.style.display = "none";
-                    } else {
-                        initialsDiv.innerText = initials;
-                        initialsDiv.style.display = "flex";
-                        profileImg.style.display = "none";
-                    }
-
-                } else {
-                    alert(data.error || "Failed to load profile.");
-                    window.location.href = "login2.html";
-                }
-            } catch (error) {
-                console.error("Error fetching profile:", error);
-                alert("Something went wrong!");
-            }
-            try {
-  const contactRes = await fetch("http://localhost:5000/emergency", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  const contacts = await contactRes.json();
-  const contactList = document.getElementById("emergency-contacts-list");
-
-  contactList.innerHTML = ""; // Clear the old loading items
-
-  if (contacts.length === 0) {
-    contactList.innerHTML = "<li>No emergency contacts added yet.</li>";
-  } else {
-    contacts.forEach((contact) => {
-      const li = document.createElement("li");
-      li.innerHTML = `<b>${contact.name}</b> (${contact.relationship}) - ${contact.phone}`;
-      contactList.appendChild(li);
-    });
+  if (!token) {
+    alert("You must log in first!");
+    window.location.href = "login2.html";
+    return;
   }
-} catch (err) {
-  console.error("Failed to load emergency contacts", err);
-  document.getElementById("emergency-contacts-list").innerHTML = "<li>Error loading contacts.</li>";
-}
 
+  try {
+    const response = await fetch("http://localhost:5000/profile", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // Profile info
+      document.getElementById("profile-name").innerText = `${data.first_name} ${data.last_name}`;
+      document.getElementById("profile-email").innerText = data.email;
+      document.getElementById("full-name").innerText = `${data.first_name} ${data.last_name}`;
+      document.getElementById("gender").innerText = data.gender || "Not specified";
+      document.getElementById("dob").innerText = data.dob || "Not specified";
+      document.getElementById("joined").innerText = new Date(data.created_at).toDateString();
+      document.getElementById("email").innerText = data.email;
+
+      const initials = data.first_name.charAt(0).toUpperCase() + data.last_name.charAt(0).toUpperCase();
+      const initialsDiv = document.getElementById("profile-initials");
+      const profileImg = document.getElementById("profile-pic");
+
+      if (data.profile_pic) {
+        profileImg.src = `http://localhost:5000/uploads/${data.profile_pic}`;
+        profileImg.style.display = "block";
+        initialsDiv.style.display = "none";
+      } else {
+        initialsDiv.innerText = initials;
+        initialsDiv.style.display = "flex";
+        profileImg.style.display = "none";
+      }
+
+      // ✅ Emergency Contacts
+      const contactRes = await fetch("http://localhost:5000/emergency", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const contacts = await contactRes.json();
+      const contactList = document.getElementById("emergency-contacts-list");
+
+      contactList.innerHTML = "";
+
+      if (contacts.length === 0) {
+        contactList.innerHTML = "<li>No emergency contacts added yet.</li>";
+      } else {
+        contacts.forEach((contact) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<b>${contact.name}</b> (${contact.relationship}) - ${contact.phone}`;
+          contactList.appendChild(li);
         });
-        // Load Emergency Contacts
- 
-        // Logout function - Updated to match login2.html functionality
-        document.getElementById("logout-button").addEventListener("click", function() {
-            localStorage.removeItem("token");
-            alert("Logged out successfully!");
-            window.location.href = "login2.html";
-        });
-        document.getElementById('back').addEventListener('click', function() {
-        window.location.href = 'home2.html'; 
-        });
+      }
+
+    } else {
+      alert(data.error || "Failed to load profile.");
+      window.location.href = "login2.html";
+    }
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    alert("Something went wrong!");
+  }
+});
     </script>
 </body>
 </html>

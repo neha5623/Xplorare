@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +13,26 @@
       </style>
       
     <style>
+        .alert {
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    display: none;
+}
+
+.alert-error {
+    background-color: #ffccd5;
+    color: #b3001b;
+    border: 1px solid #ff4b6e;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -190,6 +210,7 @@
             <div class="header">
                 <div class="logo">Xplorare.</div>
             </div>
+            <div id="alert-box" class="alert"></div>
             <h1 class="signup-title">Create Account</h1>
             <form id="signup-form">
                 <div class="name-group">
@@ -204,7 +225,8 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="johndoe@example.com" required>
+                    <input type="text" id="email" placeholder="johndoe@example.com" required>
+
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
@@ -247,11 +269,64 @@
     </div>
     <script src="theme.js"></script>
 <script>
-    
+    function showAlert(message, type = "error") {
+  const alertBox = document.getElementById("alert-box");
+  alertBox.textContent = message;
+  alertBox.className = "alert " + (type === "success" ? "alert-success" : "alert-error");
+  alertBox.style.display = "block";
+  
+}
+function calculateAge(dobStr) {
+    const dob = new Date(dobStr);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
+  }
     document.getElementById('signup-form').addEventListener('submit', async function (e) {
         e.preventDefault();
+        const firstName = document.getElementById('firstname').value.trim();
+    const lastName = document.getElementById('lastname').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const gender = document.querySelector('input[name="gender"]:checked')?.value;
+    const dob = document.getElementById('dob').value;
+    const profilePic = document.getElementById('profile-pic-upload').files[0];
+    const nameRegex = /^[A-Za-z]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!firstName || !nameRegex.test(firstName)) {
+        return showAlert("Please enter a valid first name (letters only).");
+    }
     
-        const form = new FormData();
+    if (!lastName || !nameRegex.test(lastName)) {
+        return showAlert("Please enter a valid last name (letters only).");
+    }
+    
+    if (!email || !emailRegex.test(email)) {
+        return showAlert("Please enter a valid email address.");
+    }
+    
+    if (!password || password.length < 6) {
+        return showAlert("Password must be at least 8 characters long.");
+    }
+    
+    if (!gender) {
+        return showAlert("Please select your gender.");
+    }
+    
+    if (!dob || calculateAge(dob) < 18) {
+        return showAlert("You must be at least 18 years old to sign up.");
+    }
+    
+    if (profilePic && profilePic.size > 2 * 1024 * 1024) {
+        return showAlert("Profile picture must be less than 2MB.");
+    }
+    const form = new FormData();
+
         form.append("firstName", document.getElementById('firstname').value.trim());
         form.append("lastName", document.getElementById('lastname').value.trim());
         form.append("email", document.getElementById('email').value.trim());
@@ -259,7 +334,7 @@
         form.append("gender", document.querySelector('input[name="gender"]:checked')?.value);
         form.append("dob", document.getElementById('dob').value);
         form.append("profilePic", document.getElementById('profile-pic-upload').files[0]);
-    
+
         try {
             const response = await fetch("http://localhost:5000/signup", {
                 method: "POST",
@@ -267,12 +342,15 @@
             });
     
             const result = await response.json();
-            if (result.error) {
-                alert("Signup failed: " + result.error);
-            } else {
-                alert("Signup successful!");
-                window.location.href = "login2.html";
-            }
+           if (result.error) {
+    showAlert("Signup failed: " + result.error, "error");
+} else {
+    showAlert("Signup successful!", "success");
+    setTimeout(() => {
+        window.location.href = "login2.html";
+    }, 1500);
+}
+
         } catch (error) {
             alert("Something went wrong!");
         }
